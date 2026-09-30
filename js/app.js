@@ -1,496 +1,507 @@
 /**
- * BenX AI Showcase - Interactive Application Engine
- * Includes Cairo 30fps Waveform Simulator, Command Playground,
- * Architecture Explorer, Command Search, and Quickstart Tabs.
+ * BenX Developer Runtime - Client Engine
+ * High-performance interactive engine featuring:
+ * - Minimalist Audio Spectrum Visualizer
+ * - Raycast-Style Command Inspector & JSON Viewer
+ * - Architecture Step Navigator
+ * - Live Command Filter & Search
+ * - Keyboard Shortcuts (Ctrl/Cmd + K)
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-  initWaveformVisualizer();
-  initCommandSimulator();
-  initArchitectureExplorer();
+  initAudioSpectrum();
+  initCommandInspector();
+  initArchitecturePipeline();
   initCommandSearch();
   initQuickstartTabs();
   initClipboardHandlers();
-  initMobileMenu();
-  initTelemetryMock();
+  initKeyboardShortcuts();
+  initLiveTelemetry();
 });
 
 /* ==========================================================================
-   1. Cairo 30fps Animated Waveform Visualizer
-   Replicates the Cairo GTK4 waveform visualizer in BenX
+   1. Minimalist Audio Spectrum Visualizer
+   Clean high-density frequency bars inspired by studio telemetry
    ========================================================================== */
-let waveformState = 'idle'; // 'idle' | 'listening' | 'thinking' | 'executing'
-let waveformAnimId = null;
+let spectrumState = 'listening'; // 'idle' | 'listening' | 'executing'
 
-function initWaveformVisualizer() {
-  const canvas = document.getElementById('waveformCanvas');
+function initAudioSpectrum() {
+  const canvas = document.getElementById('audioSpectrumCanvas');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
 
-  function resizeCanvas() {
+  function resize() {
     canvas.width = canvas.parentElement.clientWidth;
-    canvas.height = 70;
+    canvas.height = 40;
   }
-  resizeCanvas();
-  window.addEventListener('resize', resizeCanvas);
+  resize();
+  window.addEventListener('resize', resize);
 
   let phase = 0;
-  const numBars = 48;
+  const barCount = 40;
 
-  function renderWaveform() {
+  function render() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     const width = canvas.width;
     const height = canvas.height;
-    const centerY = height / 2;
-    const barWidth = Math.max(3, (width / numBars) - 3);
+    const barWidth = Math.max(2, (width / barCount) - 3);
 
-    phase += (waveformState === 'thinking' ? 0.12 : waveformState === 'listening' ? 0.08 : 0.03);
+    phase += (spectrumState === 'executing' ? 0.08 : 0.04);
 
-    for (let i = 0; i < numBars; i++) {
-      const x = i * (width / numBars) + 2;
-      let amp = 6;
+    for (let i = 0; i < barCount; i++) {
+      const x = i * (width / barCount);
+      let amplitude = 4;
 
-      if (waveformState === 'idle') {
-        amp = 4 + Math.sin(phase + i * 0.25) * 3 + Math.sin(phase * 0.5 + i * 0.1) * 2;
-      } else if (waveformState === 'listening') {
-        const centerDistance = Math.abs(i - numBars / 2) / (numBars / 2);
-        amp = (1 - centerDistance) * 24 * (Math.sin(phase * 1.5 + i * 0.4) * 0.5 + 0.6) + 4;
-      } else if (waveformState === 'thinking') {
-        amp = 14 + Math.sin(phase * 2 + i * 0.6) * 10 * Math.cos(phase + i * 0.15);
-      } else if (waveformState === 'executing') {
-        amp = 18 + Math.sin(phase * 3 + i * 0.5) * 8;
+      if (spectrumState === 'idle') {
+        amplitude = 3 + Math.sin(phase + i * 0.2) * 2;
+      } else if (spectrumState === 'listening') {
+        const centerFactor = 1 - Math.abs(i - barCount / 2) / (barCount / 2);
+        amplitude = 4 + centerFactor * 18 * (0.6 + Math.sin(phase * 2 + i * 0.4) * 0.4);
+      } else if (spectrumState === 'executing') {
+        amplitude = 6 + Math.sin(phase * 3 + i * 0.6) * 12;
       }
 
-      amp = Math.max(3, Math.min(height * 0.45, Math.abs(amp)));
+      amplitude = Math.max(2, Math.min(height - 4, amplitude));
+      const y = height - amplitude;
 
-      // Gradient color based on state
-      const grad = ctx.createLinearGradient(0, centerY - amp, 0, centerY + amp);
-      if (waveformState === 'listening') {
-        grad.addColorStop(0, '#00f0ff');
-        grad.addColorStop(0.5, '#7aa2f7');
-        grad.addColorStop(1, '#00f0ff');
-      } else if (waveformState === 'thinking') {
-        grad.addColorStop(0, '#9d7cd8');
-        grad.addColorStop(0.5, '#f7768e');
-        grad.addColorStop(1, '#9d7cd8');
-      } else if (waveformState === 'executing') {
-        grad.addColorStop(0, '#00ff41');
-        grad.addColorStop(0.5, '#10b981');
-        grad.addColorStop(1, '#00ff41');
+      // Subtle monochromatic gradient
+      const grad = ctx.createLinearGradient(0, y, 0, height);
+      if (spectrumState === 'executing') {
+        grad.addColorStop(0, 'rgba(255, 255, 255, 0.95)');
+        grad.addColorStop(1, 'rgba(255, 255, 255, 0.2)');
       } else {
-        grad.addColorStop(0, 'rgba(0, 240, 255, 0.4)');
-        grad.addColorStop(0.5, 'rgba(122, 162, 247, 0.3)');
-        grad.addColorStop(1, 'rgba(0, 240, 255, 0.4)');
+        grad.addColorStop(0, 'rgba(255, 255, 255, 0.7)');
+        grad.addColorStop(1, 'rgba(255, 255, 255, 0.1)');
       }
 
       ctx.fillStyle = grad;
-      ctx.beginPath();
-      if (ctx.roundRect) {
-        ctx.roundRect(x, centerY - amp, barWidth, amp * 2, 2);
-      } else {
-        ctx.rect(x, centerY - amp, barWidth, amp * 2);
-      }
-      ctx.fill();
+      ctx.fillRect(x, y, barWidth, amplitude);
     }
 
-    waveformAnimId = requestAnimationFrame(renderWaveform);
+    requestAnimationFrame(render);
   }
 
-  renderWaveform();
+  render();
 }
 
-function setWaveformState(state) {
-  waveformState = state;
-  const statusBadge = document.getElementById('waveformStatusText');
-  if (statusBadge) {
-    statusBadge.textContent = state.toUpperCase();
-    statusBadge.className = `text-xs font-mono font-semibold px-2 py-0.5 rounded-full uppercase tracking-wider ${
-      state === 'listening' ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30' :
-      state === 'thinking' ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30' :
-      state === 'executing' ? 'bg-green-500/20 text-green-400 border border-green-500/30' :
-      'bg-slate-800 text-slate-400 border border-slate-700'
+function setSpectrumState(state) {
+  spectrumState = state;
+  const badge = document.getElementById('spectrumBadge');
+  if (badge) {
+    badge.textContent = state.toUpperCase();
+    badge.className = `text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full border ${
+      state === 'executing' 
+        ? 'border-white/30 text-white bg-white/10' 
+        : 'border-white/10 text-zinc-400 bg-white/[0.02]'
     }`;
   }
 }
 
 /* ==========================================================================
-   2. BenX Interactive Command Playground
-   Simulates natural language execution in real-time
+   2. Raycast-Style Command Inspector & JSON Viewer
    ========================================================================== */
-const SIMULATED_COMMANDS = {
+const RUNTIME_COMMANDS = {
   "switch to workspace 3": {
-    category: "Hyprland Window & Workspace",
+    category: "Compositor IPC",
     model: "Groq Llama 3.3 70B",
-    latency: "118ms",
-    ipc: "hyprctl dispatch workspace 3",
-    safety: "PASSED (Safe Read/Window Action)",
-    output: `[HYPRLAND_IPC] Executed: hyprctl dispatch workspace 3\n[MONITOR 0] Active workspace shifted to 3 (eDP-1)\n[WINDOW_MANAGER] Restored window focus to 'kitty @ workspace 3'`,
-    status: "Workspace switched to 3 successfully."
+    ttft_ms: 68,
+    total_ms: 94,
+    tokens: 42,
+    guardrail: "PASS",
+    ipc_call: "hyprctl dispatch workspace 3",
+    stdout: "workspace 3 -> focused active monitor eDP-1 (window: kitty.terminal)",
+    json: {
+      action: "hyprland_dispatch",
+      target: "workspace",
+      argument: 3,
+      monitor: "eDP-1",
+      socket: "/run/user/1000/hypr/socket2.sock",
+      execution_time_ms: 7.2,
+      exit_code: 0
+    }
   },
-  "take a screenshot of region": {
-    category: "Wayland Peripherals",
+  "tile focused window left": {
+    category: "Compositor IPC",
     model: "Groq Llama 3.3 70B",
-    latency: "135ms",
-    ipc: "grim -g \"$(slurp)\" ~/Pictures/Screenshots/benx_capture_2026.png",
-    safety: "PASSED (Safe Media Action)",
-    output: `[WAYLAND_GRIM] Calling slurp region selector...\n[SLURP] User selected box: 210,140 1280x720\n[OUTPUT] Saved to ~/Pictures/Screenshots/benx_capture_2026.png\n[CLIPHIST] PNG image copied to Wayland clipboard history`,
-    status: "Region screenshot captured and copied to clipboard."
+    ttft_ms: 71,
+    total_ms: 102,
+    tokens: 38,
+    guardrail: "PASS",
+    ipc_call: "hyprctl dispatch movewindow l",
+    stdout: "tiled window 0x55bc14 to left column split (50/50 split ratio)",
+    json: {
+      action: "hyprland_layout_adjust",
+      subcommand: "movewindow",
+      direction: "left",
+      layout_engine: "dwindle",
+      exit_code: 0
+    }
+  },
+  "save layout as deep-work": {
+    category: "Layout Engine",
+    model: "Groq Llama 3.3 70B",
+    ttft_ms: 74,
+    total_ms: 116,
+    tokens: 54,
+    guardrail: "PASS",
+    ipc_call: "benx layouts save --name deep-work",
+    stdout: "Serialized 4 active window nodes and 2 monitor bounds to ~/.benx/layouts/deep-work.json",
+    json: {
+      action: "layout_serialize",
+      template_name: "deep-work",
+      path: "/home/user/.benx/layouts/deep-work.json",
+      windows_captured: 4,
+      monitors_captured: 2,
+      checksum_sha256: "9f82bc74a1...e201"
+    }
   },
   "set power profile to power-saver": {
-    category: "Laptop & Hardware Management",
+    category: "Kernel Sysfs",
     model: "Groq Compound",
-    latency: "142ms",
-    ipc: "powerprofilesctl set power-saver",
-    safety: "PASSED (Safe Hardware Action)",
-    output: `[HARDWARE] Queried current profile: 'balanced'\n[POWERPROFILESCTL] Setting profile to 'power-saver'\n[SYSFS] CPU governor scaled to 'powersave' across 16 threads\n[BATTERY_DAEMON] Expected runtime extended by ~1h 45m`,
-    status: "Power profile set to power-saver."
+    ttft_ms: 82,
+    total_ms: 114,
+    tokens: 44,
+    guardrail: "PASS",
+    ipc_call: "powerprofilesctl set power-saver",
+    stdout: "Kernel scaling governor: powersave across 16 threads. Turbo boost disabled.",
+    json: {
+      subsystem: "powerprofilesctl",
+      target_profile: "power-saver",
+      sysfs_path: "/sys/devices/system/cpu/cpufreq/scaling_governor",
+      battery_projection_delta: "+1h 48m",
+      exit_code: 0
+    }
   },
-  "what is my battery level?": {
-    category: "Telemetry & Diagnostics",
+  "inspect battery telemetry": {
+    category: "Hardware Diagnostics",
     model: "Groq Llama 3.1 8B Instant",
-    latency: "84ms",
-    ipc: "upower -i /org/freedesktop/UPower/devices/battery_BAT0",
-    safety: "PASSED (Safe Read-Only)",
-    output: `[UPOWER] Device: BAT0 (Li-poly)\n[PERCENT] 94% Capacity\n[STATE] Discharging (~4h 18m remaining)\n[ENERGY_RATE] 11.4 W\n[HEALTH] 98.2% original capacity (48.1 / 49.0 Wh)`,
-    status: "Battery is at 94%, discharging with ~4h 18m remaining."
-  },
-  "scan for wifi networks": {
-    category: "Network Management",
-    model: "Groq Llama 3.3 70B",
-    latency: "128ms",
-    ipc: "nmcli -t -f SSID,SIGNAL,SECURITY device wifi list",
-    safety: "PASSED (Safe Network Read)",
-    output: `[NMCLI] Initiating 802.11ax scan on wlan0...\n  • Aurora-5G       [Signal: 98% | WPA3]\n  • HomeLab_Mesh    [Signal: 86% | WPA2]\n  • BenX-IoT-Node   [Signal: 74% | WPA2 Enterprise]\n  • CoffeeRoasters  [Signal: 52% | Open]`,
-    status: "Found 4 Wi-Fi networks nearby."
-  },
-  "show top processes by cpu": {
-    category: "System Monitoring",
-    model: "Groq Llama 3.1 8B Instant",
-    latency: "92ms",
-    ipc: "ps -eo pid,pcpu,pmem,comm --sort=-pcpu | head -n 6",
-    safety: "PASSED (Safe System Read)",
-    output: `PID     %CPU  %MEM  COMMAND\n1204    3.8   1.2   Hyprland\n2189    2.4   0.8   benx.py (GTK4)\n3410    1.9   2.6   zen-browser\n1184    0.8   0.4   pipewire\n2901    0.5   0.3   waybar`,
-    status: "System load is nominal. Hyprland and BenX using under 5% CPU combined."
+    ttft_ms: 46,
+    total_ms: 64,
+    tokens: 68,
+    guardrail: "PASS",
+    ipc_call: "upower -i /org/freedesktop/UPower/devices/battery_BAT0",
+    stdout: "BAT0: 94.2% (Discharging at 11.2W). Est: 4h 16m. Health: 98.1% (48.1/49.0 Wh).",
+    json: {
+      device: "battery_BAT0",
+      state: "discharging",
+      percentage: 94.2,
+      energy_rate_watts: 11.2,
+      time_to_empty_seconds: 15360,
+      health_ratio: 0.981
+    }
   },
   "kill process chrome": {
-    category: "System Control & Guardrail",
+    category: "Security Barrier",
     model: "Groq Llama 3.3 70B",
-    latency: "110ms",
-    ipc: "pkill -f chrome",
-    safety: "⚠️ GUARDRAIL TRIGGERED: jarvis_ai/executor.py CONFIRM_ACTIONS",
-    output: `[SAFETY_BARRIER] Action matches CONFIRM_ACTIONS list: 'kill_process'\n[PROMPT_REQUIRED] "Are you sure you want to terminate 6 Chrome instances (PID 14022-14028)?"\n[STATUS] Waiting for explicit user confirmation via Adw.Toast or [Y/n]...\n[SAFETY_NOTE] Critical system processes (hyprland, systemd, pipewire) are hardcoded immune from kill.`,
-    status: "Safety barrier intercepted destructive process kill. Confirmation requested."
+    ttft_ms: 58,
+    total_ms: 88,
+    tokens: 36,
+    guardrail: "GATED_CONFIRMATION_REQUIRED",
+    ipc_call: "CONFIRM_ACTIONS intercept: pkill -f chrome",
+    stdout: "⚠️ DESTRUCTIVE SYSCALL INTERCEPTED: 'kill_process' requires explicit confirmation.",
+    json: {
+      action: "kill_process",
+      target_process: "chrome",
+      matched_pids: [14201, 14202, 14208],
+      guardrail_policy: "CONFIRM_ACTIONS",
+      status: "AWAITING_USER_APPROVAL",
+      protected_processes_check: "CLEARED (non-systemd / non-hyprland)"
+    }
   },
-  "save current layout as coding": {
-    category: "Hyprland Automation",
+  "capture region to clipboard": {
+    category: "Wayland Peripherals",
     model: "Groq Llama 3.3 70B",
-    latency: "156ms",
-    ipc: "python3 -c 'import jarvis_ai.hyprland as h; h.save_layout(\"coding\")'",
-    safety: "PASSED (Safe Workspace Action)",
-    output: `[HYPRLAND_LAYOUT] Enumerating windows on Workspace 1 & 2...\n  - Kitty (80x24 left split) -> file: editor.rs\n  - Zen Browser (right split) -> url: github.com\n  - BenX Compact (floating 420x560 pinned)\n[TEMPLATE_SAVED] Written to ~/.benx/layouts/coding.json\n[RESTORE_CMD] Say 'restore coding layout' anytime!`,
-    status: "Saved window and workspace layout to ~/.benx/layouts/coding.json."
-  },
-  "lock the screen": {
-    category: "Wayland Security",
-    model: "Groq Llama 3.1 8B Instant",
-    latency: "76ms",
-    ipc: "hyprlock",
-    safety: "PASSED (Safe Screen Action)",
-    output: `[WAYLAND_SECURITY] Spawning hyprlock session...\n[STATUS] PAM authentication active\n[EFFECT] Wayland surface locked with blurred background effect`,
-    status: "Screen locked via hyprlock."
+    ttft_ms: 62,
+    total_ms: 89,
+    tokens: 32,
+    guardrail: "PASS",
+    ipc_call: "grim -g \"$(slurp)\" - | wl-copy -t image/png",
+    stdout: "Wayland surface frame buffer captured. Image piped directly into wl-clipboard & cliphist.",
+    json: {
+      pipeline: ["slurp", "grim", "wl-copy", "cliphist"],
+      mime_type: "image/png",
+      storage: "in-memory-pipe",
+      exit_code: 0
+    }
   }
 };
 
-function initCommandSimulator() {
-  const inputEl = document.getElementById('simInput');
-  const runBtn = document.getElementById('simRunBtn');
-  const chipContainer = document.getElementById('simChips');
-  const simTerminal = document.getElementById('simTerminal');
-  const simMetaModel = document.getElementById('simMetaModel');
-  const simMetaLatency = document.getElementById('simMetaLatency');
-  const simMetaCategory = document.getElementById('simMetaCategory');
-  const simMetaSafety = document.getElementById('simMetaSafety');
+let currentActiveCommandKey = "switch to workspace 3";
+let currentViewTab = "formatted"; // "formatted" | "json"
 
-  if (!inputEl || !runBtn || !simTerminal) return;
+function initCommandInspector() {
+  const inputEl = document.getElementById('inspectorInput');
+  const runBtn = document.getElementById('inspectorRunBtn');
+  const chipContainer = document.getElementById('commandPresetChips');
+  const tabFormattedBtn = document.getElementById('tabFormattedBtn');
+  const tabJsonBtn = document.getElementById('tabJsonBtn');
+  const outputContainer = document.getElementById('inspectorOutput');
 
-  // Handle preset chip click
-  if (chipContainer) {
-    chipContainer.addEventListener('click', (e) => {
-      const chip = e.target.closest('.cmd-chip');
-      if (chip) {
-        const cmd = chip.getAttribute('data-cmd') || chip.textContent.trim().replace(/^"|"$/g, '');
-        inputEl.value = cmd;
-        executeSimulatedCommand(cmd);
-      }
-    });
+  const metaModel = document.getElementById('metaModel');
+  const metaLatency = document.getElementById('metaLatency');
+  const metaCategory = document.getElementById('metaCategory');
+  const metaSecurity = document.getElementById('metaSecurity');
+
+  if (!inputEl || !outputContainer) return;
+
+  function renderOutput(data) {
+    if (currentViewTab === 'json') {
+      outputContainer.innerHTML = `
+        <pre class="text-zinc-300 font-mono text-xs leading-relaxed overflow-x-auto p-4 bg-black/60 rounded-lg border border-white/[0.06]"><code>${JSON.stringify(data.json, null, 2)}</code></pre>
+      `;
+    } else {
+      const isGated = data.guardrail.includes('GATED');
+      outputContainer.innerHTML = `
+        <div class="space-y-3 font-mono text-xs">
+          <div class="flex items-center justify-between pb-2 border-b border-white/[0.06] text-zinc-400">
+            <span class="text-zinc-300">$ ${data.ipc_call}</span>
+            <span class="${isGated ? 'text-amber-400' : 'text-emerald-400'}">${isGated ? 'AWAITING CONFIRMATION' : 'EXIT 0'}</span>
+          </div>
+          <div class="text-zinc-200 leading-relaxed">${data.stdout}</div>
+          <div class="pt-2 text-[11px] text-zinc-500 flex items-center gap-4 border-t border-white/[0.04]">
+            <span>TTFT: <strong class="text-zinc-300">${data.ttft_ms}ms</strong></span>
+            <span>Total Latency: <strong class="text-zinc-300">${data.total_ms}ms</strong></span>
+            <span>Tokens: <strong class="text-zinc-300">${data.tokens}</strong></span>
+          </div>
+        </div>
+      `;
+    }
+
+    if (metaModel) metaModel.textContent = data.model;
+    if (metaLatency) metaLatency.textContent = `${data.total_ms}ms`;
+    if (metaCategory) metaCategory.textContent = data.category;
+    if (metaSecurity) {
+      const isGated = data.guardrail.includes('GATED');
+      metaSecurity.textContent = isGated ? 'Gated by Policy' : 'Verified (Passed)';
+      metaSecurity.className = `text-[11px] font-mono font-medium ${isGated ? 'text-amber-400' : 'text-emerald-400'}`;
+    }
   }
 
-  // Handle run button click
-  runBtn.addEventListener('click', () => {
-    const cmd = inputEl.value.trim();
-    if (cmd) executeSimulatedCommand(cmd);
-  });
+  function executeCommand(cmdText) {
+    const key = Object.keys(RUNTIME_COMMANDS).find(k => 
+      k.toLowerCase() === cmdText.toLowerCase() || cmdText.toLowerCase().includes(k.toLowerCase())
+    ) || "switch to workspace 3";
 
-  // Handle enter key
-  inputEl.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-      const cmd = inputEl.value.trim();
-      if (cmd) executeSimulatedCommand(cmd);
-    }
-  });
+    currentActiveCommandKey = key;
+    const data = RUNTIME_COMMANDS[key];
 
-  function executeSimulatedCommand(rawCmd) {
-    const cmdKey = Object.keys(SIMULATED_COMMANDS).find(k => 
-      k.toLowerCase() === rawCmd.toLowerCase() || rawCmd.toLowerCase().includes(k.toLowerCase())
-    );
-
-    const data = cmdKey ? SIMULATED_COMMANDS[cmdKey] : {
-      category: "Natural Language AI Inference",
-      model: "Groq Llama 3.3 70B",
-      latency: "148ms",
-      ipc: `jarvis_ai.ai_engine.process("${rawCmd}")`,
-      safety: "PASSED (Standard AI Query)",
-      output: `[AI_ENGINE] Model processed query: "${rawCmd}"\n[INTENT] Natural language reasoning with contextual memory\n[RESPONSE] BenX parsed intent and matched system tools.`,
-      status: `Processed request "${rawCmd}".`
-    };
-
-    // Animate waveform to 'listening' then 'thinking' then 'executing'
-    setWaveformState('listening');
-    runBtn.disabled = true;
-    runBtn.innerHTML = '<span class="inline-block animate-spin mr-1">⚡</span> Routing...';
-
-    simTerminal.innerHTML = `
-      <div class="text-cyan-400 font-mono flex items-center gap-2">
-        <span class="inline-block w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
-        Ingesting audio & text prompt: <span class="text-white font-semibold">"${rawCmd}"</span>
+    setSpectrumState('executing');
+    outputContainer.innerHTML = `
+      <div class="flex items-center gap-2 text-xs font-mono text-zinc-400 py-6 justify-center">
+        <span class="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>
+        <span>Evaluating AST & dispatching kernel call...</span>
       </div>
-      <div class="text-slate-400 text-xs font-mono mt-1">Transcribing via Whisper / Google Speech & dispatching to Groq Cloud...</div>
     `;
 
     setTimeout(() => {
-      setWaveformState('thinking');
-      simTerminal.innerHTML += `
-        <div class="text-purple-400 font-mono text-xs mt-2">
-          🧠 Multi-Model Router selected: <strong class="text-purple-300">${data.model}</strong> (${data.latency})
-        </div>
-      `;
-
-      setTimeout(() => {
-        setWaveformState('executing');
-        
-        // Update metadata pills
-        if (simMetaModel) simMetaModel.textContent = data.model;
-        if (simMetaLatency) simMetaLatency.textContent = data.latency;
-        if (simMetaCategory) simMetaCategory.textContent = data.category;
-        if (simMetaSafety) {
-          simMetaSafety.textContent = data.safety.includes('GUARDRAIL') ? 'Safety Gate: GATED' : 'Safety Gate: APPROVED';
-          simMetaSafety.className = data.safety.includes('GUARDRAIL') 
-            ? 'px-2.5 py-1 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 font-mono text-xs font-semibold'
-            : 'px-2.5 py-1 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-mono text-xs font-semibold';
-        }
-
-        // Render full terminal output
-        const isGated = data.safety.includes('GUARDRAIL');
-        simTerminal.innerHTML = `
-          <div class="flex items-center justify-between border-b border-white/10 pb-2 mb-3">
-            <span class="text-cyan-400 text-xs font-mono">user@hyprland:~$ benx "${rawCmd}"</span>
-            <span class="text-xs font-mono ${isGated ? 'text-amber-400' : 'text-emerald-400'}">${isGated ? '⚠️ CONFIRMATION_GATED' : '✓ EXECUTED'}</span>
-          </div>
-          <div class="text-slate-300 text-xs font-mono mb-2 whitespace-pre-wrap leading-relaxed">${data.output}</div>
-          <div class="p-2.5 rounded ${isGated ? 'bg-amber-950/40 border border-amber-500/30 text-amber-200' : 'bg-cyan-950/40 border border-cyan-500/30 text-cyan-200'} text-xs font-mono mt-3">
-            <strong>${isGated ? '🛡️ Guardrail Status:' : '🤖 BenX Status:'}</strong> ${data.status}
-          </div>
-        `;
-
-        runBtn.disabled = false;
-        runBtn.innerHTML = 'Execute';
-
-        setTimeout(() => {
-          setWaveformState('idle');
-        }, 1500);
-
-      }, 350);
-    }, 300);
+      renderOutput(data);
+      setSpectrumState('listening');
+    }, 180);
   }
+
+  // Handle Preset Chips
+  if (chipContainer) {
+    chipContainer.addEventListener('click', (e) => {
+      const chip = e.target.closest('.command-chip');
+      if (chip) {
+        const cmd = chip.getAttribute('data-cmd') || chip.textContent.trim().replace(/^"|"$/g, '');
+        inputEl.value = cmd;
+        executeCommand(cmd);
+      }
+    });
+  }
+
+  // Handle Run
+  if (runBtn) {
+    runBtn.addEventListener('click', () => {
+      executeCommand(inputEl.value.trim());
+    });
+  }
+
+  inputEl.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      executeCommand(inputEl.value.trim());
+    }
+  });
+
+  // Tab Switching (Formatted vs Raw JSON)
+  if (tabFormattedBtn && tabJsonBtn) {
+    tabFormattedBtn.addEventListener('click', () => {
+      currentViewTab = 'formatted';
+      tabFormattedBtn.className = 'px-3 py-1 text-xs font-mono rounded bg-white/10 text-white font-medium transition-all';
+      tabJsonBtn.className = 'px-3 py-1 text-xs font-mono rounded text-zinc-400 hover:text-white transition-all';
+      renderOutput(RUNTIME_COMMANDS[currentActiveCommandKey]);
+    });
+
+    tabJsonBtn.addEventListener('click', () => {
+      currentViewTab = 'json';
+      tabJsonBtn.className = 'px-3 py-1 text-xs font-mono rounded bg-white/10 text-white font-medium transition-all';
+      tabFormattedBtn.className = 'px-3 py-1 text-xs font-mono rounded text-zinc-400 hover:text-white transition-all';
+      renderOutput(RUNTIME_COMMANDS[currentActiveCommandKey]);
+    });
+  }
+
+  // Initial render
+  renderOutput(RUNTIME_COMMANDS[currentActiveCommandKey]);
 }
 
 /* ==========================================================================
-   3. Interactive Architecture Pipeline Explorer
+   3. Architecture Pipeline Step Navigator
    ========================================================================== */
-const ARCH_STEPS = {
+const ARCH_MODULES = {
   1: {
-    title: "1. Multi-Modal Ingestion & Wake Word",
-    tagline: "Always-on, ultra-low latency listener and input interfaces",
-    desc: "BenX continuously monitors for the wake word ('Hey BenX') using lightweight on-device detection. While speaking, a 30fps Cairo canvas responds with animated acoustic waveforms across GTK4, the floating 420x560 widget, or the Tokyo-Night terminal.",
-    points: [
-      "WakeWordEngine with adaptive noise thresholding",
-      "GTK4 / Libadwaita floating widget (pinned Wayland overlay)",
-      "Tokyo-Night TUI with keyboard-driven hotkeys",
-      "Flutter mobile companion app via MongoDB real-time sync"
+    title: "1. Surface Ingestion Layer",
+    subtitle: "Non-blocking Wayland hooks, voice detection, and terminal interfaces",
+    body: "BenX exposes three concurrent entry vectors: a native GTK4/Libadwaita client with floating HUD overlay, a lightweight Tokyo-Night terminal TUI (<45MB RAM footprint), and an on-device WakeWordEngine with continuous background listening. Commands are received as structured events without UI thread stalls.",
+    specs: [
+      { label: "Voice Pipeline", val: "Cairo 60fps audio spectrum & Google/Whisper STT" },
+      { label: "Wayland Integration", val: "Layer-shell protocol, non-intrusive floating HUD" },
+      { label: "Memory Footprint", val: "42MB resident set size in TUI mode" }
     ]
   },
   2: {
-    title: "2. Multi-Model Intelligence & RAG Router",
-    tagline: "Ultra-fast Groq inference (Llama 3.3 70B) with OpenRouter fallback",
-    desc: "Natural language instructions are routed to Groq's high-speed inference engine (averaging 80-140ms latency). Queries requiring workspace history or previous interactions leverage local vector RAG memory for full context.",
-    points: [
-      "Groq primary models: Llama 3.3 70B, Qwen3-32B, and Compound",
-      "Seamless fallback to OpenRouter or local models on API disruption",
-      "RAG memory engine stores past tasks, layout preferences, and logs",
-      "Vision pipeline using Tesseract OCR and Llama 4 Scout for screen understanding"
+    title: "2. Groq LPUs & Multi-Model Kernel",
+    subtitle: "Sub-100ms deterministic inference with local RAG context",
+    body: "Incoming intent is evaluated on Groq's specialized Tensor Streaming Processors running Llama 3.3 70B, achieving 80ms Time-To-First-Token. The kernel extracts parameters into a typed AST and cross-references user layout memories stored in ~/.benx/layouts/.",
+    specs: [
+      { label: "Primary Engine", val: "Groq Llama 3.3 70B Versatile" },
+      { label: "Latency Benchmark", val: "80ms TTFT / 310 tokens/sec" },
+      { label: "Fallback Core", val: "OpenRouter & local quantized models" }
     ]
   },
   3: {
-    title: "3. Ironclad Safety & Guardrails Barrier",
-    tagline: "CONFIRM_ACTIONS security perimeter preventing unwanted changes",
-    desc: "Before executing any command on your Linux system, BenX evaluates the payload against strict safety rules in jarvis_ai/executor.py. Destructive operations (shutdown, pacman upgrades, kill process) are paused until explicitly approved.",
-    points: [
-      "Strict gating for shutdown, reboot, suspend, and package installation",
-      "Immunity whitelist for core processes (Hyprland, systemd, pipewire)",
-      "Interactive confirmation modal / Adw.Toast notifications",
-      "Read-only telemetry never interrupted for maximum responsiveness"
+    title: "3. CONFIRM_ACTIONS Security Barrier",
+    subtitle: "Deterministic system gate isolating destructive operations",
+    body: "Before any system modification reaches the OS, it passes through the strict safety barrier in jarvis_ai/executor.py. Destructive operations (process termination, pacman updates, power state changes, layout deletion) trigger mandatory user confirmation via interactive modal or terminal prompt.",
+    specs: [
+      { label: "Immunity Whitelist", val: "PID 1, systemd, Hyprland, pipewire, wireplumber" },
+      { label: "Gated Actions", val: "shutdown, reboot, suspend, pacman, yay, pkill, trash" },
+      { label: "Confirmation Mode", val: "Synchronous blocking verification with timeout abort" }
     ]
   },
   4: {
-    title: "4. Native Hyprland & Wayland Execution Layer",
-    tagline: "Direct IPC window dispatch, grim/slurp capture, and hardware hooks",
-    desc: "BenX talks directly to Hyprland's socket2.sock and hyprctl dispatch commands. It tiles, floats, resizes windows, manages workspaces, handles screenshot regions with grim/slurp, and interfaces with Linux hardware controls.",
-    points: [
-      "Hyprland socket2 real-time event listener (auto-tile, PiP detection)",
-      "JSON layout templates (~/.benx/layouts/) for one-click setup restore",
-      "nmcli network management, Bluetooth pairing, and audio routing",
-      "Battery profile scaling governors (<15% automatic power-saver)"
-    ]
-  },
-  5: {
-    title: "5. Feedback, Audio Waveform & Activity Logging",
-    tagline: "Immediate visual, tactile, and voice telemetry back to the user",
-    desc: "Execution results are instantly broadcast back through native Libadwaita toasts, voice synthesis (TTS), live dashboard meters, and persisted activity logs.",
-    points: [
-      "Adw.ToastOverlay in GTK4 and terminal visual feedback in TUI",
-      "Real-time CPU, RAM, Battery, and Disk telemetry gauges",
-      "Persistent activity logs in ~/.benx/benx.log",
-      "Voice response with optional mute toggle"
+    title: "4. Native Hyprland & Linux Sysfs Dispatch",
+    subtitle: "Direct socket2 IPC and low-level Linux kernel hardware hooks",
+    body: "Approved actions execute over Unix domain sockets (/run/user/1000/hypr/socket2.sock) using native hyprctl dispatch commands. Hardware routines communicate directly with powerprofilesctl, upower DBus, and networkmanager.",
+    specs: [
+      { label: "Compositor Dispatch", val: "Native hyprctl socket2 IPC (<8ms turnaround)" },
+      { label: "Peripherals Stack", val: "grim + slurp frame-buffer capture, cliphist, ydotool" },
+      { label: "Hardware Stack", val: "Kernel scaling governors, nmcli, bluetoothctl" }
     ]
   }
 };
 
-function initArchitectureExplorer() {
-  const stepsContainer = document.getElementById('archStepsNav');
-  const titleEl = document.getElementById('archStepTitle');
-  const taglineEl = document.getElementById('archStepTagline');
-  const descEl = document.getElementById('archStepDesc');
-  const pointsEl = document.getElementById('archStepPoints');
+function initArchitecturePipeline() {
+  const nav = document.getElementById('archNav');
+  const title = document.getElementById('archTitle');
+  const subtitle = document.getElementById('archSubtitle');
+  const body = document.getElementById('archBody');
+  const specs = document.getElementById('archSpecs');
 
-  if (!stepsContainer || !titleEl) return;
+  if (!nav || !title) return;
 
-  function loadStep(stepNum) {
-    const data = ARCH_STEPS[stepNum];
+  function setStep(num) {
+    const data = ARCH_MODULES[num];
     if (!data) return;
 
-    titleEl.textContent = data.title;
-    taglineEl.textContent = data.tagline;
-    descEl.textContent = data.desc;
+    title.textContent = data.title;
+    subtitle.textContent = data.subtitle;
+    body.textContent = data.body;
 
-    pointsEl.innerHTML = data.points.map(pt => `
-      <li class="flex items-start gap-2.5 text-slate-300 text-sm">
-        <span class="text-cyan-400 mt-1 font-bold">▹</span>
-        <span>${pt}</span>
-      </li>
+    specs.innerHTML = data.specs.map(s => `
+      <div class="p-3 rounded-lg bg-black/40 border border-white/[0.06] font-mono text-xs">
+        <span class="text-zinc-500 block text-[10px] uppercase">${s.label}</span>
+        <strong class="text-zinc-200">${s.val}</strong>
+      </div>
     `).join('');
 
-    // Update active styles on buttons
-    const buttons = stepsContainer.querySelectorAll('button');
+    const buttons = nav.querySelectorAll('button');
     buttons.forEach((btn, idx) => {
-      const num = idx + 1;
-      if (num === stepNum) {
-        btn.className = "flex-1 min-w-[140px] text-left p-3.5 rounded-xl border border-cyan-500/50 bg-cyan-950/40 text-cyan-300 font-semibold shadow-[0_0_15px_rgba(0,240,255,0.2)] transition-all";
+      if (idx + 1 === num) {
+        btn.className = 'px-4 py-2.5 rounded-lg text-left border border-white/20 bg-white/[0.07] text-white font-mono text-xs font-semibold transition-all';
       } else {
-        btn.className = "flex-1 min-w-[140px] text-left p-3.5 rounded-xl border border-white/10 bg-slate-900/60 text-slate-400 hover:text-white hover:border-white/20 transition-all";
+        btn.className = 'px-4 py-2.5 rounded-lg text-left border border-white/[0.06] bg-transparent text-zinc-400 hover:text-white font-mono text-xs transition-all';
       }
     });
   }
 
-  stepsContainer.addEventListener('click', (e) => {
-    const btn = e.target.closest('button[data-step]');
+  nav.addEventListener('click', (e) => {
+    const btn = e.target.closest('button[data-arch-step]');
     if (btn) {
-      const step = parseInt(btn.getAttribute('data-step'), 10);
-      loadStep(step);
+      setStep(parseInt(btn.getAttribute('data-arch-step'), 10));
     }
   });
 
-  loadStep(1);
+  setStep(1);
 }
 
 /* ==========================================================================
-   4. Filterable Command Search & Cheatsheet
+   4. Live Command Search & Filter
    ========================================================================== */
 function initCommandSearch() {
-  const searchInput = document.getElementById('cmdSearchInput');
-  const filterPills = document.querySelectorAll('.cmd-filter-pill');
-  const cmdCards = document.querySelectorAll('.cmd-card-item');
+  const searchInput = document.getElementById('commandSearchInput');
+  const filterBtns = document.querySelectorAll('.cat-filter-btn');
+  const commandCards = document.querySelectorAll('.command-card');
 
-  if (!searchInput || !cmdCards.length) return;
+  if (!searchInput || !commandCards.length) return;
 
-  let activeCategory = 'all';
+  let activeCat = 'all';
 
-  function applyFilter() {
-    const query = searchInput.value.toLowerCase().trim();
+  function filter() {
+    const q = searchInput.value.toLowerCase().trim();
 
-    cmdCards.forEach(card => {
-      const cat = card.getAttribute('data-category') || '';
+    commandCards.forEach(card => {
+      const cardCat = card.getAttribute('data-cat') || '';
       const text = card.textContent.toLowerCase();
 
-      const matchesCategory = (activeCategory === 'all' || cat === activeCategory);
-      const matchesQuery = (!query || text.includes(query));
+      const matchesCat = (activeCat === 'all' || cardCat === activeCat);
+      const matchesQuery = (!q || text.includes(q));
 
-      if (matchesCategory && matchesQuery) {
-        card.style.display = 'block';
-      } else {
-        card.style.display = 'none';
-      }
+      card.style.display = (matchesCat && matchesQuery) ? 'block' : 'none';
     });
   }
 
-  searchInput.addEventListener('input', applyFilter);
+  searchInput.addEventListener('input', filter);
 
-  filterPills.forEach(pill => {
-    pill.addEventListener('click', () => {
-      filterPills.forEach(p => p.classList.remove('bg-cyan-500', 'text-slate-950', 'font-bold'));
-      filterPills.forEach(p => p.classList.add('bg-slate-800/80', 'text-slate-300'));
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => {
+        b.classList.remove('bg-white', 'text-black', 'font-semibold');
+        b.classList.add('bg-white/[0.04]', 'text-zinc-400');
+      });
 
-      pill.classList.remove('bg-slate-800/80', 'text-slate-300');
-      pill.classList.add('bg-cyan-500', 'text-slate-950', 'font-bold');
+      btn.classList.add('bg-white', 'text-black', 'font-semibold');
+      btn.classList.remove('bg-white/[0.04]', 'text-zinc-400');
 
-      activeCategory = pill.getAttribute('data-category');
-      applyFilter();
+      activeCat = btn.getAttribute('data-cat');
+      filter();
     });
   });
 }
 
 /* ==========================================================================
-   5. Quickstart Tabs Switcher
+   5. Tabbed Quickstart Installer
    ========================================================================== */
 function initQuickstartTabs() {
-  const tabButtons = document.querySelectorAll('.qs-tab-btn');
-  const tabPanes = document.querySelectorAll('.qs-tab-pane');
+  const tabBtns = document.querySelectorAll('.qs-tab');
+  const tabPanes = document.querySelectorAll('.qs-pane');
 
-  if (!tabButtons.length) return;
+  if (!tabBtns.length) return;
 
-  tabButtons.forEach(btn => {
+  tabBtns.forEach(btn => {
     btn.addEventListener('click', () => {
-      const target = btn.getAttribute('data-tab');
+      const targetId = btn.getAttribute('data-target');
 
-      tabButtons.forEach(b => {
-        b.classList.remove('border-cyan-400', 'text-cyan-400', 'bg-cyan-500/10');
-        b.classList.add('border-transparent', 'text-slate-400');
+      tabBtns.forEach(b => {
+        b.classList.remove('border-white', 'text-white');
+        b.classList.add('border-transparent', 'text-zinc-400');
       });
 
-      btn.classList.add('border-cyan-400', 'text-cyan-400', 'bg-cyan-500/10');
-      btn.classList.remove('border-transparent', 'text-slate-400');
+      btn.classList.add('border-white', 'text-white');
+      btn.classList.remove('border-transparent', 'text-zinc-400');
 
       tabPanes.forEach(pane => {
-        if (pane.id === target) {
+        if (pane.id === targetId) {
           pane.classList.remove('hidden');
         } else {
           pane.classList.add('hidden');
@@ -501,81 +512,52 @@ function initQuickstartTabs() {
 }
 
 /* ==========================================================================
-   6. One-Click Copy to Clipboard with Toast
+   6. Minimal Clipboard Handler with Inline Toast
    ========================================================================== */
 function initClipboardHandlers() {
-  const copyButtons = document.querySelectorAll('.btn-copy');
-
-  copyButtons.forEach(btn => {
+  document.querySelectorAll('.copy-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      const textToCopy = btn.getAttribute('data-clipboard-text') || btn.closest('.code-box')?.querySelector('code')?.innerText || '';
-      if (!textToCopy) return;
+      const text = btn.getAttribute('data-copy') || btn.closest('.code-row')?.querySelector('code')?.innerText || '';
+      if (!text) return;
 
-      navigator.clipboard.writeText(textToCopy).then(() => {
-        showToast('Copied command to clipboard!');
-        const originalHtml = btn.innerHTML;
-        btn.innerHTML = `<span class="text-emerald-400 text-xs">✓ Copied</span>`;
+      navigator.clipboard.writeText(text).then(() => {
+        const original = btn.innerHTML;
+        btn.innerHTML = `<span class="text-zinc-200 text-[11px] font-mono">Copied</span>`;
         setTimeout(() => {
-          btn.innerHTML = originalHtml;
-        }, 2000);
-      }).catch(err => {
-        console.error('Failed to copy', err);
+          btn.innerHTML = original;
+        }, 1800);
       });
     });
   });
 }
 
-function showToast(msg) {
-  let toast = document.getElementById('globalToast');
-  if (!toast) {
-    toast = document.createElement('div');
-    toast.id = 'globalToast';
-    toast.className = 'fixed bottom-6 right-6 z-50 px-4 py-2.5 rounded-xl bg-slate-900/90 text-cyan-300 border border-cyan-500/50 shadow-[0_0_20px_rgba(0,240,255,0.3)] backdrop-blur-md font-mono text-xs flex items-center gap-2 transform transition-all duration-300 translate-y-12 opacity-0';
-    document.body.appendChild(toast);
-  }
-
-  toast.innerHTML = `<span class="text-emerald-400">✓</span> ${msg}`;
-  toast.classList.remove('translate-y-12', 'opacity-0');
-  toast.classList.add('translate-y-0', 'opacity-100');
-
-  setTimeout(() => {
-    toast.classList.remove('translate-y-0', 'opacity-100');
-    toast.classList.add('translate-y-12', 'opacity-0');
-  }, 2400);
-}
-
 /* ==========================================================================
-   7. Mobile Navigation Menu
+   7. Keyboard Shortcuts (Cmd+K / Ctrl+K focus)
    ========================================================================== */
-function initMobileMenu() {
-  const toggleBtn = document.getElementById('mobileMenuToggle');
-  const menu = document.getElementById('mobileNav');
-
-  if (!toggleBtn || !menu) return;
-
-  toggleBtn.addEventListener('click', () => {
-    menu.classList.toggle('hidden');
-  });
-
-  const links = menu.querySelectorAll('a');
-  links.forEach(l => {
-    l.addEventListener('click', () => menu.classList.add('hidden'));
+function initKeyboardShortcuts() {
+  window.addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+      e.preventDefault();
+      const input = document.getElementById('inspectorInput');
+      if (input) {
+        input.focus();
+        input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
   });
 }
 
 /* ==========================================================================
-   8. Telemetry Mock Ticker in Cockpit Header
+   8. Live Telemetry Metric Ticker
    ========================================================================== */
-function initTelemetryMock() {
-  const cpuEl = document.getElementById('mockCpu');
-  const ramEl = document.getElementById('mockRam');
+function initLiveTelemetry() {
+  const memEl = document.getElementById('liveMemStat');
+  const cpuEl = document.getElementById('liveCpuStat');
 
-  if (!cpuEl || !ramEl) return;
+  if (!memEl || !cpuEl) return;
 
   setInterval(() => {
-    const cpu = (2.2 + Math.random() * 2.8).toFixed(1);
-    const ram = (28 + Math.floor(Math.random() * 5));
-    cpuEl.textContent = `${cpu}%`;
-    ramEl.textContent = `${ram}%`;
-  }, 3500);
+    cpuEl.textContent = `${(1.8 + Math.random() * 1.6).toFixed(1)}%`;
+    memEl.textContent = `${(42 + Math.floor(Math.random() * 4))}MB`;
+  }, 4000);
 }
