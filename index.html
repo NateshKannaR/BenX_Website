@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BenX V-2.0 — Sovereign AI Assistant for Arch Linux & Hyprland</title>
+  <meta name="description" content="BenX V-2.0 is an advanced AI assistant optimized for Arch Linux and Hyprland (Wayland), with complete desktop automation, hardware control, Groq multi-model intelligence, and modern GTK4/Libadwaita glassmorphic UI.">
+  
+  <!-- Favicon / Meta -->
+  <link rel="icon" type="image/jpeg" href="assets/benx.jpg">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Orbitron:wght@600;800;900&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              cyan: '#00f0ff',
+              green: '#00ff41',
+              purple: '#9d7cd8',
+              pink: '#f7768e',
+              amber: '#e0af68',
+              blue: '#7aa2f7',
+              dark: '#07090e',
+              surface: '#0e131f',
+              card: '#121826'
+            }
+          },
+          fontFamily: {
+            sans: ['Outfit', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+            tech: ['Orbitron', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-[#07090e] text-slate-100 font-sans min-h-screen relative selection:bg-cyan-500/30 selection:text-cyan-200">
+
+  <!-- Scanlines visual overlay -->
+  <div class="scanlines"></div>
+
+  <!-- Ambient Glow Effects -->
+  <div class="fixed top-0 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-[128px] pointer-events-none -z-10"></div>
+  <div class="fixed top-1/3 right-10 w-96 h-96 bg-purple-600/10 rounded-full blur-[140px] pointer-events-none -z-10"></div>
+  <div class="fixed bottom-10 left-1/3 w-[30rem] h-[30rem] bg-emerald-500/10 rounded-full blur-[150px] pointer-events-none -z-10"></div>
+
+  <!-- ==========================================================================
+       TOP NAVIGATION BAR
+       ========================================================================== -->
+  <header class="sticky top-0 z-40 w-full backdrop-blur-xl bg-[#07090e]/80 border-b border-white/10 transition-all">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      
+      <!-- Brand Logo -->
+      <a href="#" class="flex items-center gap-3 group">
+        <div class="relative w-11 h-11 rounded-xl overflow-hidden p-0.5 border border-cyan-500/40 group-hover:border-cyan-400 group-hover:shadow-[0_0_15px_rgba(0,240,255,0.4)] transition-all">
+          <img src="assets/benx.jpg" alt="BenX AI Assistant" class="w-full h-full object-cover rounded-lg">
+          <span class="absolute bottom-1 right-1 w-2.5 h-2.5 rounded-full bg-emerald-400 led-indicator"></span>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-tech text-2xl font-black tracking-wider text-white">BenX<span class="text-cyan-400">.</span></span>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-cyan-950/80 border border-cyan-500/40 text-cyan-300 font-semibold uppercase">V-2.0</span>
+          </div>
+          <p class="text-[11px] font-mono text-slate-400 tracking-tight hidden sm:block">Hyprland & Wayland Sovereign AI</p>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation Links -->
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
+        <a href="#how-it-works" class="hover:text-cyan-400 transition-colors flex items-center gap-1.5">
+          <i data-lucide="cpu" class="w-4 h-4 text-cyan-400"></i> How It Works
+        </a>
+        <a href="#simulator" class="hover:text-cyan-400 transition-colors flex items-center gap-1.5">
+          <i data-lucide="terminal" class="w-4 h-4 text-purple-400"></i> Live Simulator
+        </a>
+        <a href="#features" class="hover:text-cyan-400 transition-colors flex items-center gap-1.5">
+          <i data-lucide="layout-grid" class="w-4 h-4 text-emerald-400"></i> Features
+        </a>
+        <a href="#interfaces" class="hover:text-cyan-400 transition-colors flex items-center gap-1.5">
+          <i data-lucide="monitor" class="w-4 h-4 text-blue-400"></i> Triple UI
+        </a>
+        <a href="#commands" class="hover:text-cyan-400 transition-colors flex items-center gap-1.5">
+          <i data-lucide="command" class="w-4 h-4 text-amber-400"></i> Commands
+        </a>
+        <a href="#quickstart" class="hover:text-cyan-400 transition-colors flex items-center gap-1.5">
+          <i data-lucide="play-circle" class="w-4 h-4 text-pink-400"></i> Quick Start
+        </a>
+      </nav>
+
+      <!-- Right CTAs -->
+      <div class="flex items-center gap-3">
+        <a href="https://github.com/NateshKannaR/BenX-Assisto_V-2.0" target="_blank" rel="noopener noreferrer" 
+           class="hidden sm:inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-mono font-medium text-slate-200 bg-slate-800/80 hover:bg-slate-700/80 border border-white/10 hover:border-cyan-500/40 transition-all">
+          <i data-lucide="github" class="w-4 h-4 text-white"></i>
+          <span>GitHub</span>
+          <span class="px-1.5 py-0.5 rounded bg-cyan-950 text-cyan-400 text-[10px] font-bold border border-cyan-800/60">★ Star</span>
+        </a>
+
+        <a href="#simulator" 
+           class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold text-slate-950 bg-gradient-to-r from-cyan-400 to-cyan-300 hover:from-cyan-300 hover:to-white shadow-[0_0_20px_rgba(0,240,255,0.4)] transition-all">
+          <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
+          <span>Try Demo</span>
+        </a>
+
+        <!-- Mobile Menu Button -->
+        <button id="mobileMenuToggle" class="md:hidden p-2 rounded-lg text-slate-400 hover:text-white bg-slate-900 border border-white/10">
+          <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Dropdown Nav -->
+    <div id="mobileNav" class="hidden md:hidden bg-[#0a0e17] border-b border-white/10 px-4 pt-2 pb-6 space-y-3">
+      <a href="#how-it-works" class="block py-2 text-slate-300 hover:text-cyan-400 font-medium">How It Works</a>
+      <a href="#simulator" class="block py-2 text-slate-300 hover:text-cyan-400 font-medium">Live Simulator</a>
+      <a href="#features" class="block py-2 text-slate-300 hover:text-cyan-400 font-medium">Features</a>
+      <a href="#interfaces" class="block py-2 text-slate-300 hover:text-cyan-400 font-medium">Triple UI</a>
+      <a href="#commands" class="block py-2 text-slate-300 hover:text-cyan-400 font-medium">Command List</a>
+      <a href="#quickstart" class="block py-2 text-slate-300 hover:text-cyan-400 font-medium">Quick Start</a>
+      <a href="https://github.com/NateshKannaR/BenX-Assisto_V-2.0" target="_blank" class="block py-2 text-cyan-400 font-mono text-sm">View on GitHub →</a>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       HERO SECTION
+       ========================================================================== -->
+  <section class="relative pt-12 pb-20 md:pt-20 md:pb-32 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Top Pill Tag -->
+      <div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-slate-900/90 border border-cyan-500/30 text-cyan-300 text-xs font-mono font-medium mb-8 backdrop-blur-md shadow-[0_0_20px_rgba(0,240,255,0.15)] animate-float">
+        <span class="w-2 h-2 rounded-full bg-cyan-400 led-indicator"></span>
+        <span>BenX Assisto V-2.0</span>
+        <span class="text-slate-500">•</span>
+        <span class="text-slate-300">Arch Linux + Hyprland (Wayland)</span>
+      </div>
+
+      <!-- Main Heading -->
+      <div class="grid lg:grid-cols-12 gap-12 items-center">
+        
+        <div class="lg:col-span-7 space-y-6">
+          <h1 class="font-tech text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-tight">
+            The Sovereign <span class="bg-gradient-to-r from-cyan-400 via-cyan-200 to-white bg-clip-text text-transparent glow-cyan-text">AI Assistant</span> for Linux Desktops.
+          </h1>
+
+          <p class="text-lg sm:text-xl text-slate-300 leading-relaxed max-w-2xl font-normal">
+            BenX V-2.0 brings full <strong>Hyprland desktop automation</strong>, complete <strong>hardware telemetry & power control</strong>, ultra-fast <strong>Groq Llama 3.3 multi-model intelligence</strong>, and a stunning <strong>GTK4 / Libadwaita glassmorphic UI</strong> with Tokyo-Night terminal parity.
+          </p>
+
+          <!-- Core Capability Highlights -->
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2">
+            <div class="p-3 rounded-xl bg-slate-900/60 border border-white/10 flex items-center gap-2.5">
+              <i data-lucide="layers" class="w-5 h-5 text-cyan-400 shrink-0"></i>
+              <div class="text-xs">
+                <span class="font-semibold text-white block">Hyprland IPC</span>
+                <span class="text-slate-400 font-mono text-[10px]">socket2.sock automation</span>
+              </div>
+            </div>
+            <div class="p-3 rounded-xl bg-slate-900/60 border border-white/10 flex items-center gap-2.5">
+              <i data-lucide="zap" class="w-5 h-5 text-purple-400 shrink-0"></i>
+              <div class="text-xs">
+                <span class="font-semibold text-white block">Dual LLM Core</span>
+                <span class="text-slate-400 font-mono text-[10px]">Groq 80ms + OpenRouter</span>
+              </div>
+            </div>
+            <div class="p-3 rounded-xl bg-slate-900/60 border border-white/10 flex items-center gap-2.5 col-span-2 sm:col-span-1">
+              <i data-lucide="shield-check" class="w-5 h-5 text-emerald-400 shrink-0"></i>
+              <div class="text-xs">
+                <span class="font-semibold text-white block">Safety Gate</span>
+                <span class="text-slate-400 font-mono text-[10px]">CONFIRM_ACTIONS gated</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="flex flex-wrap items-center gap-4 pt-4">
+            <a href="#how-it-works" 
+               class="px-6 py-3.5 rounded-xl font-bold text-sm text-slate-950 bg-cyan-400 hover:bg-cyan-300 shadow-[0_0_30px_rgba(0,240,255,0.4)] transition-all flex items-center gap-2">
+              <i data-lucide="sparkles" class="w-4 h-4"></i>
+              <span>Discover How It Works</span>
+            </a>
+
+            <a href="#simulator" 
+               class="px-6 py-3.5 rounded-xl font-mono text-sm text-white bg-slate-900/80 hover:bg-slate-800 border border-cyan-500/40 hover:border-cyan-400 shadow-[0_0_20px_rgba(0,240,255,0.15)] transition-all flex items-center gap-2">
+              <i data-lucide="play" class="w-4 h-4 text-cyan-400"></i>
+              <span>Interactive Simulator</span>
+            </a>
+          </div>
+
+          <!-- Quick terminal install snippet -->
+          <div class="pt-4">
+            <div class="code-box p-3 rounded-xl bg-slate-950 border border-white/10 flex items-center justify-between gap-3 font-mono text-xs text-slate-300">
+              <div class="flex items-center gap-2 overflow-x-auto whitespace-nowrap">
+                <span class="text-cyan-400 select-none">$</span>
+                <code>git clone https://github.com/NateshKannaR/BenX-Assisto_V-2.0.git && ./setup_and_run.sh</code>
+              </div>
+              <button class="btn-copy shrink-0 p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors" title="Copy to clipboard">
+                <i data-lucide="copy" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Hero Graphic & Live Telemetry Cockpit -->
+        <div class="lg:col-span-5 relative">
+          
+          <!-- Outer Glassmorphic Cockpit Card -->
+          <div class="glass-panel-glow rounded-2xl p-5 relative overflow-hidden">
+            
+            <!-- Window header -->
+            <div class="flex items-center justify-between border-b border-white/10 pb-3 mb-4">
+              <div class="flex items-center gap-2">
+                <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
+                <div class="w-3 h-3 rounded-full bg-amber-500/80"></div>
+                <div class="w-3 h-3 rounded-full bg-emerald-500/80"></div>
+                <span class="ml-2 text-xs font-mono text-slate-400">benx-cockpit (GTK4 / Hyprland)</span>
+              </div>
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                ACTIVE DAEMON
+              </span>
+            </div>
+
+            <!-- Hero Robot Mascot + Cyberpunk Ring -->
+            <div class="relative flex items-center justify-center py-6">
+              
+              <!-- Concentric Orbit Rings (like Cairo animated UI) -->
+              <div class="absolute w-56 h-56 rounded-full border border-dashed border-cyan-500/20 orbit-ring-cw"></div>
+              <div class="absolute w-44 h-44 rounded-full border border-purple-500/20 orbit-ring-ccw"></div>
+              <div class="absolute w-64 h-64 rounded-full border border-emerald-500/10"></div>
+
+              <!-- Mascot Robot Image -->
+              <div class="relative z-10 w-36 h-36 rounded-2xl overflow-hidden border-2 border-cyan-400/50 shadow-[0_0_30px_rgba(0,240,255,0.3)] bg-slate-950">
+                <img src="assets/robot-hero.png" alt="BenX AI Core" class="w-full h-full object-cover">
+              </div>
+            </div>
+
+            <!-- Cairo 30fps Waveform Display -->
+            <div class="bg-slate-950/80 rounded-xl p-3.5 border border-cyan-500/30 mb-4">
+              <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-2">
+                  <i data-lucide="audio-waveform" class="w-4 h-4 text-cyan-400"></i>
+                  <span class="text-xs font-mono text-slate-300">Cairo 30fps Acoustic Waveform</span>
+                </div>
+                <span id="waveformStatusText" class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
+                  IDLE LISTENING
+                </span>
+              </div>
+              <canvas id="waveformCanvas"></canvas>
+            </div>
+
+            <!-- Live Telemetry Status Row -->
+            <div class="grid grid-cols-4 gap-2 text-center font-mono">
+              <div class="p-2 rounded-lg bg-slate-900/80 border border-white/5">
+                <span class="text-[10px] text-slate-400 block">CPU LOAD</span>
+                <span id="mockCpu" class="text-xs font-bold text-cyan-300">3.4%</span>
+              </div>
+              <div class="p-2 rounded-lg bg-slate-900/80 border border-white/5">
+                <span class="text-[10px] text-slate-400 block">RAM</span>
+                <span id="mockRam" class="text-xs font-bold text-purple-300">31%</span>
+              </div>
+              <div class="p-2 rounded-lg bg-slate-900/80 border border-white/5">
+                <span class="text-[10px] text-slate-400 block">BATTERY</span>
+                <span class="text-xs font-bold text-emerald-300">94%</span>
+              </div>
+              <div class="p-2 rounded-lg bg-slate-900/80 border border-white/5">
+                <span class="text-[10px] text-slate-400 block">WORKSPACE</span>
+                <span class="text-xs font-bold text-amber-300">#3</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Floating badge decoration -->
+          <div class="absolute -bottom-4 -left-4 glass-panel p-3 rounded-xl border border-cyan-500/40 hidden sm:flex items-center gap-3 shadow-xl">
+            <div class="w-8 h-8 rounded-lg bg-cyan-500/20 text-cyan-400 flex items-center justify-center font-bold">
+              <i data-lucide="mic" class="w-4 h-4"></i>
+            </div>
+            <div class="text-xs font-mono">
+              <span class="text-slate-400 block text-[10px]">Wake Word Trigger</span>
+              <strong class="text-white">"Hey BenX"</strong>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       SECTION 2: HOW BENX WORKS (Interactive Step-by-Step Architecture)
+       ========================================================================== -->
+  <section id="how-it-works" class="py-20 bg-slate-950/70 border-t border-b border-white/10 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Section Header -->
+      <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 text-xs font-mono">
+          <i data-lucide="git-merge" class="w-3.5 h-3.5"></i> End-to-End Pipeline
+        </div>
+        <h2 class="font-tech text-3xl sm:text-4xl font-extrabold text-white tracking-wide">
+          How BenX Works Under the Hood
+        </h2>
+        <p class="text-slate-400 text-base">
+          From voice acoustic ingestion to Wayland IPC dispatch — follow the 5-stage sovereign architecture that powers BenX V-2.0.
+        </p>
+      </div>
+
+      <!-- Step Navigation Selector -->
+      <div id="archStepsNav" class="flex flex-wrap gap-3 mb-10 overflow-x-auto pb-2">
+        <button data-step="1" class="flex-1 min-w-[140px] text-left p-3.5 rounded-xl border border-cyan-500/50 bg-cyan-950/40 text-cyan-300 font-semibold shadow-[0_0_15px_rgba(0,240,255,0.2)] transition-all">
+          <span class="text-[10px] font-mono text-cyan-400 block uppercase">STAGE 01</span>
+          <span class="text-sm font-medium">1. Voice / Wake Word</span>
+        </button>
+        <button data-step="2" class="flex-1 min-w-[140px] text-left p-3.5 rounded-xl border border-white/10 bg-slate-900/60 text-slate-400 hover:text-white transition-all">
+          <span class="text-[10px] font-mono text-slate-500 block uppercase">STAGE 02</span>
+          <span class="text-sm font-medium">2. AI Multi-Model Brain</span>
+        </button>
+        <button data-step="3" class="flex-1 min-w-[140px] text-left p-3.5 rounded-xl border border-white/10 bg-slate-900/60 text-slate-400 hover:text-white transition-all">
+          <span class="text-[10px] font-mono text-slate-500 block uppercase">STAGE 03</span>
+          <span class="text-sm font-medium">3. Safety Guardrail Gate</span>
+        </button>
+        <button data-step="4" class="flex-1 min-w-[140px] text-left p-3.5 rounded-xl border border-white/10 bg-slate-900/60 text-slate-400 hover:text-white transition-all">
+          <span class="text-[10px] font-mono text-slate-500 block uppercase">STAGE 04</span>
+          <span class="text-sm font-medium">4. Hyprland & Wayland</span>
+        </button>
+        <button data-step="5" class="flex-1 min-w-[140px] text-left p-3.5 rounded-xl border border-white/10 bg-slate-900/60 text-slate-400 hover:text-white transition-all">
+          <span class="text-[10px] font-mono text-slate-500 block uppercase">STAGE 05</span>
+          <span class="text-sm font-medium">5. Feedback & Telemetry</span>
+        </button>
+      </div>
+
+      <!-- Active Stage Detailed Card -->
+      <div class="glass-panel rounded-2xl p-6 sm:p-8 border border-white/15 relative overflow-hidden">
+        
+        <div class="grid lg:grid-cols-12 gap-8 items-center">
+          
+          <div class="lg:col-span-7 space-y-4">
+            <span class="text-xs font-mono text-cyan-400 tracking-wider uppercase font-semibold">Technical Architecture Deep-Dive</span>
+            <h3 id="archStepTitle" class="text-2xl sm:text-3xl font-bold text-white font-tech">
+              1. Multi-Modal Ingestion & Wake Word
+            </h3>
+            <p id="archStepTagline" class="text-sm font-mono text-purple-300">
+              Always-on, ultra-low latency listener and input interfaces
+            </p>
+            <p id="archStepDesc" class="text-slate-300 text-sm leading-relaxed">
+              BenX continuously monitors for the wake word ('Hey BenX') using lightweight on-device detection. While speaking, a 30fps Cairo canvas responds with animated acoustic waveforms across GTK4, the floating 420x560 widget, or the Tokyo-Night terminal.
+            </p>
+
+            <div class="pt-2">
+              <span class="text-xs font-mono text-slate-400 block mb-2 uppercase">Key Technical Capabilities:</span>
+              <ul id="archStepPoints" class="space-y-2">
+                <!-- Dynamically populated by JS -->
+              </ul>
+            </div>
+          </div>
+
+          <!-- Right side visual representation -->
+          <div class="lg:col-span-5 bg-slate-950 rounded-xl p-5 border border-white/10 font-mono text-xs space-y-3">
+            <div class="flex items-center justify-between border-b border-white/10 pb-2">
+              <span class="text-cyan-400">ipc_pipeline_trace.log</span>
+              <span class="text-slate-500">unix:///tmp/benx.sock</span>
+            </div>
+            
+            <div class="space-y-2 text-slate-300">
+              <div class="flex items-center gap-2">
+                <span class="text-cyan-400 font-bold">[1. INGEST]</span>
+                <span>Microphone audio -> WakeWordEngine</span>
+              </div>
+              <div class="flex items-center gap-2 pl-4 text-slate-400">
+                <span>↳ Cairo 30fps wave rendering at 60Hz Wayland</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-purple-400 font-bold">[2. ROUTE]</span>
+                <span>Groq Llama 3.3 70B (80ms TTFT)</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-amber-400 font-bold">[3. VERIFY]</span>
+                <span>jarvis_ai/executor.py safety barrier</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-emerald-400 font-bold">[4. DISPATCH]</span>
+                <span>hyprctl dispatch / grim / nmcli</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-blue-400 font-bold">[5. TOAST]</span>
+                <span>Adw.ToastOverlay + Speech Synthesis</span>
+              </div>
+            </div>
+
+            <div class="p-2.5 rounded bg-cyan-950/40 border border-cyan-500/20 text-cyan-300 text-[11px] mt-3">
+              ⚡ Zero latency buffering. Direct local IPC over Unix sockets.
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Pipeline Visual Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mt-8">
+        
+        <div class="pipeline-step p-4 rounded-xl bg-slate-900/50 border border-white/10 space-y-2">
+          <div class="w-8 h-8 rounded-lg bg-cyan-500/20 text-cyan-400 flex items-center justify-center font-bold">1</div>
+          <h4 class="text-sm font-semibold text-white">Wake & Ingest</h4>
+          <p class="text-xs text-slate-400">"Hey BenX" voice detection, Cairo waveform, or terminal hotkey.</p>
+        </div>
+
+        <div class="pipeline-step p-4 rounded-xl bg-slate-900/50 border border-white/10 space-y-2">
+          <div class="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center font-bold">2</div>
+          <h4 class="text-sm font-semibold text-white">Multi-Model AI</h4>
+          <p class="text-xs text-slate-400">Groq ultra-fast Llama 3.3 70B + Qwen3 & OpenRouter fallback.</p>
+        </div>
+
+        <div class="pipeline-step p-4 rounded-xl bg-slate-900/50 border border-white/10 space-y-2">
+          <div class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold">3</div>
+          <h4 class="text-sm font-semibold text-white">Safety Barrier</h4>
+          <p class="text-xs text-slate-400">CONFIRM_ACTIONS intercepts dangerous commands (shutdown, pacman).</p>
+        </div>
+
+        <div class="pipeline-step p-4 rounded-xl bg-slate-900/50 border border-white/10 space-y-2">
+          <div class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold">4</div>
+          <h4 class="text-sm font-semibold text-white">Wayland Dispatch</h4>
+          <p class="text-xs text-slate-400">hyprctl IPC, grim/slurp, cliphist, ydotool, and sysfs controls.</p>
+        </div>
+
+        <div class="pipeline-step p-4 rounded-xl bg-slate-900/50 border border-white/10 space-y-2">
+          <div class="w-8 h-8 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold">5</div>
+          <h4 class="text-sm font-semibold text-white">Feedback Loop</h4>
+          <p class="text-xs text-slate-400">Libadwaita toasts, speech synthesis, and persistent layout logs.</p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       SECTION 3: INTERACTIVE LIVE SIMULATOR / PLAYGROUND
+       ========================================================================== -->
+  <section id="simulator" class="py-20 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-12 space-y-4">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-950/60 border border-purple-500/30 text-purple-300 text-xs font-mono">
+          <i data-lucide="play" class="w-3.5 h-3.5"></i> Interactive Playground
+        </div>
+        <h2 class="font-tech text-3xl sm:text-4xl font-extrabold text-white tracking-wide">
+          Try Natural Language Commands
+        </h2>
+        <p class="text-slate-400 text-base">
+          Click any preset command chip or type your own instructions to see how BenX interprets intent, validates safety guardrails, and drives the Linux desktop.
+        </p>
+      </div>
+
+      <!-- Playground Box -->
+      <div class="glass-panel-glow rounded-2xl p-6 sm:p-8 max-w-4xl mx-auto">
+        
+        <!-- Preset Chips -->
+        <div class="mb-6">
+          <span class="text-xs font-mono text-slate-400 block mb-2.5">Click a sample command to execute:</span>
+          <div id="simChips" class="flex flex-wrap gap-2">
+            <button class="cmd-chip px-3 py-1.5 rounded-lg bg-slate-900 border border-white/10 text-xs font-mono text-slate-300" data-cmd="switch to workspace 3">
+              "switch to workspace 3"
+            </button>
+            <button class="cmd-chip px-3 py-1.5 rounded-lg bg-slate-900 border border-white/10 text-xs font-mono text-slate-300" data-cmd="take a screenshot of region">
+              "take a screenshot of region"
+            </button>
+            <button class="cmd-chip px-3 py-1.5 rounded-lg bg-slate-900 border border-white/10 text-xs font-mono text-slate-300" data-cmd="set power profile to power-saver">
+              "set power profile to power-saver"
+            </button>
+            <button class="cmd-chip px-3 py-1.5 rounded-lg bg-slate-900 border border-white/10 text-xs font-mono text-slate-300" data-cmd="what is my battery level?">
+              "what is my battery level?"
+            </button>
+            <button class="cmd-chip px-3 py-1.5 rounded-lg bg-slate-900 border border-white/10 text-xs font-mono text-slate-300" data-cmd="scan for wifi networks">
+              "scan for wifi networks"
+            </button>
+            <button class="cmd-chip px-3 py-1.5 rounded-lg bg-slate-900 border border-white/10 text-xs font-mono text-slate-300" data-cmd="kill process chrome">
+              ⚠️ "kill process chrome" (Safety Gate)
+            </button>
+            <button class="cmd-chip px-3 py-1.5 rounded-lg bg-slate-900 border border-white/10 text-xs font-mono text-slate-300" data-cmd="save current layout as coding">
+              "save current layout as coding"
+            </button>
+          </div>
+        </div>
+
+        <!-- Input Bar -->
+        <div class="flex flex-col sm:flex-row gap-3 mb-6">
+          <div class="relative flex-1">
+            <i data-lucide="terminal" class="w-4 h-4 text-cyan-400 absolute left-3.5 top-3.5"></i>
+            <input id="simInput" type="text" 
+                   value="switch to workspace 3" 
+                   placeholder="Type a voice command, e.g., 'switch to workspace 2' or 'battery status'..." 
+                   class="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-950 border border-white/15 focus:border-cyan-400 focus:outline-none text-sm font-mono text-white placeholder-slate-500 shadow-inner">
+          </div>
+          <button id="simRunBtn" class="px-6 py-3 rounded-xl font-bold font-mono text-sm text-slate-950 bg-cyan-400 hover:bg-cyan-300 shadow-[0_0_20px_rgba(0,240,255,0.3)] transition-all flex items-center justify-center gap-2 shrink-0">
+            <i data-lucide="play" class="w-4 h-4 fill-current"></i>
+            <span>Execute</span>
+          </button>
+        </div>
+
+        <!-- Simulator Metadata Header -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4 font-mono text-xs">
+          <div class="p-2.5 rounded-lg bg-slate-950/70 border border-white/5">
+            <span class="text-slate-500 block text-[10px]">AI MODEL</span>
+            <strong id="simMetaModel" class="text-purple-300">Groq Llama 3.3 70B</strong>
+          </div>
+          <div class="p-2.5 rounded-lg bg-slate-950/70 border border-white/5">
+            <span class="text-slate-500 block text-[10px]">INFERENCE LATENCY</span>
+            <strong id="simMetaLatency" class="text-cyan-300">118ms</strong>
+          </div>
+          <div class="p-2.5 rounded-lg bg-slate-950/70 border border-white/5">
+            <span class="text-slate-500 block text-[10px]">SUBSYSTEM</span>
+            <strong id="simMetaCategory" class="text-slate-200">Hyprland Window IPC</strong>
+          </div>
+          <div class="p-2.5 rounded-lg bg-slate-950/70 border border-white/5">
+            <span class="text-slate-500 block text-[10px]">GUARDRAILS</span>
+            <span id="simMetaSafety" class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-bold">APPROVED</span>
+          </div>
+        </div>
+
+        <!-- Terminal Output Screen -->
+        <div class="terminal-window p-4 min-h-[220px]">
+          <div class="terminal-header -m-4 mb-3">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-red-500"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+              <span class="text-xs text-slate-400 font-mono ml-2">benx-daemon :: socket2.sock</span>
+            </div>
+            <span class="text-[10px] text-cyan-400 font-mono">READY</span>
+          </div>
+
+          <div id="simTerminal" class="space-y-2 pt-2">
+            <div class="flex items-center justify-between border-b border-white/10 pb-2 mb-3">
+              <span class="text-cyan-400 text-xs font-mono">user@hyprland:~$ benx "switch to workspace 3"</span>
+              <span class="text-xs font-mono text-emerald-400">✓ EXECUTED</span>
+            </div>
+            <div class="text-slate-300 text-xs font-mono mb-2 whitespace-pre-wrap leading-relaxed">[HYPRLAND_IPC] Executed: hyprctl dispatch workspace 3
+[MONITOR 0] Active workspace shifted to 3 (eDP-1)
+[WINDOW_MANAGER] Restored window focus to 'kitty @ workspace 3'</div>
+            <div class="p-2.5 rounded bg-cyan-950/40 border border-cyan-500/30 text-cyan-200 text-xs font-mono mt-3">
+              <strong>🤖 BenX Status:</strong> Workspace switched to 3 successfully.
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       SECTION 4: CORE FEATURES SHOWCASE MATRIX
+       ========================================================================== -->
+  <section id="features" class="py-20 bg-slate-950/60 border-t border-b border-white/10 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/60 border border-emerald-500/30 text-emerald-300 text-xs font-mono">
+          <i data-lucide="layers" class="w-3.5 h-3.5"></i> Comprehensive Feature Matrix
+        </div>
+        <h2 class="font-tech text-3xl sm:text-4xl font-extrabold text-white tracking-wide">
+          Engineered for Linux Power Users
+        </h2>
+        <p class="text-slate-400 text-base">
+          Everything from low-level Wayland window geometry to systemd services, battery thresholds, OCR screen analysis, and multi-model fallbacks.
+        </p>
+      </div>
+
+      <!-- Feature Grid -->
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        
+        <!-- Feature 1: Hyprland Automation -->
+        <div class="glass-panel p-6 rounded-2xl glow-border-hover space-y-4">
+          <div class="w-12 h-12 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center">
+            <i data-lucide="app-window" class="w-6 h-6"></i>
+          </div>
+          <h3 class="text-lg font-bold text-white">Full Hyprland Automation</h3>
+          <p class="text-sm text-slate-300 leading-relaxed">
+            Move, resize, pin, float or tile windows. Seamlessly shift windows between workspaces or toggle special scratchpads (<code class="text-cyan-300">special:magic</code>) via native <code class="text-cyan-300">hyprctl</code> IPC.
+          </p>
+          <ul class="text-xs font-mono text-slate-400 space-y-1.5 pt-2">
+            <li class="flex items-center gap-2"><span class="text-cyan-400">✓</span> JSON Layout save & restore (~/.benx/layouts/)</li>
+            <li class="flex items-center gap-2"><span class="text-cyan-400">✓</span> Dynamic hyprland_rules.conf injector</li>
+            <li class="flex items-center gap-2"><span class="text-cyan-400">✓</span> socket2.sock real-time event listener</li>
+          </ul>
+        </div>
+
+        <!-- Feature 2: Laptop & Hardware Control -->
+        <div class="glass-panel p-6 rounded-2xl glow-border-hover space-y-4">
+          <div class="w-12 h-12 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center">
+            <i data-lucide="battery-charging" class="w-6 h-6"></i>
+          </div>
+          <h3 class="text-lg font-bold text-white">Laptop & Hardware Control</h3>
+          <p class="text-sm text-slate-300 leading-relaxed">
+            Full governance over power profiles, scaling governors, Wi-Fi (<code class="text-purple-300">nmcli</code>), Bluetooth pairing, and audio routing. Low battery (<15%) triggers auto-powersaver.
+          </p>
+          <ul class="text-xs font-mono text-slate-400 space-y-1.5 pt-2">
+            <li class="flex items-center gap-2"><span class="text-purple-400">✓</span> Powerprofilesctl & sysfs scaling</li>
+            <li class="flex items-center gap-2"><span class="text-purple-400">✓</span> Bluetooth auto-pairing & call audio</li>
+            <li class="flex items-center gap-2"><span class="text-purple-400">✓</span> Top CPU/RAM telemetry & process guard</li>
+          </ul>
+        </div>
+
+        <!-- Feature 3: Ironclad Safety Barrier -->
+        <div class="glass-panel p-6 rounded-2xl glow-border-hover space-y-4">
+          <div class="w-12 h-12 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center">
+            <i data-lucide="shield-alert" class="w-6 h-6"></i>
+          </div>
+          <h3 class="text-lg font-bold text-white">Ironclad Safety Guardrails</h3>
+          <p class="text-sm text-slate-300 leading-relaxed">
+            Destructive operations like shutdown, reboot, <code class="text-amber-300">pacman</code> updates, process killing, or layout deletion are strictly gated by confirmation checks before execution.
+          </p>
+          <ul class="text-xs font-mono text-slate-400 space-y-1.5 pt-2">
+            <li class="flex items-center gap-2"><span class="text-amber-400">✓</span> Protected core: hyprland, systemd, pipewire</li>
+            <li class="flex items-center gap-2"><span class="text-amber-400">✓</span> Adw.Toast & CLI explicit confirmation</li>
+            <li class="flex items-center gap-2"><span class="text-amber-400">✓</span> Desktop trash integration (gio trash)</li>
+          </ul>
+        </div>
+
+        <!-- Feature 4: Wayland Peripherals -->
+        <div class="glass-panel p-6 rounded-2xl glow-border-hover space-y-4">
+          <div class="w-12 h-12 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+            <i data-lucide="crop" class="w-6 h-6"></i>
+          </div>
+          <h3 class="text-lg font-bold text-white">Wayland Peripherals & Media</h3>
+          <p class="text-sm text-slate-300 leading-relaxed">
+            Capture fullscreen, active window, or selected regions via <code class="text-emerald-300">grim</code> and <code class="text-emerald-300">slurp</code>. Record screens with <code class="text-emerald-300">wf-recorder</code> and manage clipboard with <code class="text-emerald-300">cliphist</code>.
+          </p>
+          <ul class="text-xs font-mono text-slate-400 space-y-1.5 pt-2">
+            <li class="flex items-center gap-2"><span class="text-emerald-400">✓</span> Screen recording with exclusion rules</li>
+            <li class="flex items-center gap-2"><span class="text-emerald-400">✓</span> Cliphist history search and paste</li>
+            <li class="flex items-center gap-2"><span class="text-emerald-400">✓</span> Wayland keyboard typing via ydotool</li>
+          </ul>
+        </div>
+
+        <!-- Feature 5: Multimodal OCR & Vision -->
+        <div class="glass-panel p-6 rounded-2xl glow-border-hover space-y-4">
+          <div class="w-12 h-12 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center">
+            <i data-lucide="scan" class="w-6 h-6"></i>
+          </div>
+          <h3 class="text-lg font-bold text-white">Multimodal Screen Understanding</h3>
+          <p class="text-sm text-slate-300 leading-relaxed">
+            Instant on-screen text extraction with Tesseract OCR engine, paired with vision-language models (Llama 4 Scout) to understand app layouts, terminal errors, or browser contents.
+          </p>
+          <ul class="text-xs font-mono text-slate-400 space-y-1.5 pt-2">
+            <li class="flex items-center gap-2"><span class="text-blue-400">✓</span> "Analyze my screen" real-time prompt</li>
+            <li class="flex items-center gap-2"><span class="text-blue-400">✓</span> Error diagnostics directly from active window</li>
+            <li class="flex items-center gap-2"><span class="text-blue-400">✓</span> Privacy exclusion prevents logging sensitive areas</li>
+          </ul>
+        </div>
+
+        <!-- Feature 6: Multi-Model Intelligence & RAG -->
+        <div class="glass-panel p-6 rounded-2xl glow-border-hover space-y-4">
+          <div class="w-12 h-12 rounded-xl bg-pink-500/20 text-pink-400 flex items-center justify-center">
+            <i data-lucide="brain" class="w-6 h-6"></i>
+          </div>
+          <h3 class="text-lg font-bold text-white">Groq & OpenRouter Intelligence</h3>
+          <p class="text-sm text-slate-300 leading-relaxed">
+            Ultra-fast inference on Groq LPUs with Llama 3.3 70B, Qwen3-32B, and Compound models. Automatically degrades gracefully to OpenRouter or local fallbacks on disconnect.
+          </p>
+          <ul class="text-xs font-mono text-slate-400 space-y-1.5 pt-2">
+            <li class="flex items-center gap-2"><span class="text-pink-400">✓</span> Sub-150ms typical inference response</li>
+            <li class="flex items-center gap-2"><span class="text-pink-400">✓</span> Context-aware RAG memory engine</li>
+            <li class="flex items-center gap-2"><span class="text-pink-400">✓</span> Developer tools: code review, orchestration</li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       SECTION 5: TRIPLE USER INTERFACE (GTK4, TUI, WEB & FLUTTER)
+       ========================================================================== -->
+  <section id="interfaces" class="py-20 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-950/60 border border-blue-500/30 text-blue-300 text-xs font-mono">
+          <i data-lucide="monitor" class="w-3.5 h-3.5"></i> Multi-Platform Experience
+        </div>
+        <h2 class="font-tech text-3xl sm:text-4xl font-extrabold text-white tracking-wide">
+          One Engine. Three Modern Interfaces.
+        </h2>
+        <p class="text-slate-400 text-base">
+          Whether you want a native Wayland glassmorphic desktop app, a Tokyo-Night terminal UI, or remote control from your phone — BenX has you covered.
+        </p>
+      </div>
+
+      <!-- Interface Tabs / Cards -->
+      <div class="grid lg:grid-cols-3 gap-8">
+        
+        <!-- UI 1: GTK4 + Libadwaita -->
+        <div class="glass-panel rounded-2xl overflow-hidden border border-cyan-500/30 flex flex-col justify-between">
+          <div class="p-6 space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-mono px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800">GTK4 / Libadwaita</span>
+              <span class="text-xs text-slate-400 font-mono">python benx.py</span>
+            </div>
+            <h3 class="text-xl font-bold text-white">Glassmorphic GTK4 UI</h3>
+            <p class="text-sm text-slate-300">
+              Native Wayland client with Adw.ToastOverlay, floating notification pill, 420x560 pinned floating widget, and dynamic 30fps Cairo waveform animations.
+            </p>
+            <div class="rounded-xl overflow-hidden border border-white/10 bg-slate-950">
+              <img src="assets/benx-banner.jpg" alt="BenX GTK4 Interface" class="w-full h-48 object-cover">
+            </div>
+          </div>
+          <div class="p-6 bg-slate-950/60 border-t border-white/10 font-mono text-xs text-slate-400 space-y-1">
+            <div>• Dual window mode: Full Dashboard & Compact</div>
+            <div>• Real-time system monitoring dials</div>
+            <div>• Native preferences and API key dialogs</div>
+          </div>
+        </div>
+
+        <!-- UI 2: Tokyo-Night TUI -->
+        <div class="glass-panel rounded-2xl overflow-hidden border border-purple-500/30 flex flex-col justify-between">
+          <div class="p-6 space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-mono px-2 py-0.5 rounded bg-purple-950 text-purple-300 border border-purple-800">Terminal TUI</span>
+              <span class="text-xs text-slate-400 font-mono">python benx_tui.py</span>
+            </div>
+            <h3 class="text-xl font-bold text-white">Tokyo-Night Terminal TUI</h3>
+            <p class="text-sm text-slate-300">
+              Complete feature parity directly in your terminal. Designed for tiling window manager enthusiasts with sleek Tokyo-Night color palettes.
+            </p>
+            <div class="rounded-xl p-4 bg-[#0c1017] border border-white/10 font-mono text-[11px] text-slate-300 space-y-2 h-48 overflow-hidden">
+              <div class="text-cyan-400 font-bold">┌─── BenX TUI v2.0 (Tokyo-Night) ─────────────┐</div>
+              <div class="text-purple-300">│ CPU: 2.8% │ RAM: 32% │ BAT: 94% │ WS: #3     │</div>
+              <div>│ ------------------------------------------- │</div>
+              <div class="text-emerald-400">│ > switch to workspace 2                    │</div>
+              <div class="text-slate-400">│ [IPC] Switched to workspace 2 (kitty)       │</div>
+              <div class="text-amber-400">│ [ALERT] Battery low (<15%) profile armed    │</div>
+              <div class="text-cyan-400 font-bold">└─────────────────────────────────────────────┘</div>
+            </div>
+          </div>
+          <div class="p-6 bg-slate-950/60 border-t border-white/10 font-mono text-xs text-slate-400 space-y-1">
+            <div>• Full keyboard navigation with hotkeys</div>
+            <div>• Zero GUI dependencies required</div>
+            <div>• Tokyo-Night aesthetic syntax colors</div>
+          </div>
+        </div>
+
+        <!-- UI 3: Web UI & Flutter Mobile -->
+        <div class="glass-panel rounded-2xl overflow-hidden border border-emerald-500/30 flex flex-col justify-between">
+          <div class="p-6 space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-mono px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800">Mobile & Web</span>
+              <span class="text-xs text-slate-400 font-mono">benx_flutter / run_web.sh</span>
+            </div>
+            <h3 class="text-xl font-bold text-white">Flutter Mobile & Web UI</h3>
+            <p class="text-sm text-slate-300">
+              Cross-device synergy. Control your Arch Linux machine remotely from Android with bidirectional MongoDB state sync and shared chat history.
+            </p>
+            <div class="rounded-xl overflow-hidden border border-white/10 bg-slate-950">
+              <img src="assets/benx.jpg" alt="BenX Mobile & Companion" class="w-full h-48 object-cover">
+            </div>
+          </div>
+          <div class="p-6 bg-slate-950/60 border-t border-white/10 font-mono text-xs text-slate-400 space-y-1">
+            <div>• Remote command dispatch from your phone</div>
+            <div>• Real-time shared chat state</div>
+            <div>• Vercel / Railway ready web interface</div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       SECTION 6: SEARCHABLE COMMAND REFERENCE CHEATSHEET
+       ========================================================================== -->
+  <section id="commands" class="py-20 bg-slate-950/70 border-t border-b border-white/10 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-12 space-y-4">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-950/60 border border-amber-500/30 text-amber-300 text-xs font-mono">
+          <i data-lucide="command" class="w-3.5 h-3.5"></i> Natural Language Reference
+        </div>
+        <h2 class="font-tech text-3xl sm:text-4xl font-extrabold text-white tracking-wide">
+          Commands You Can Speak or Type
+        </h2>
+        <p class="text-slate-400 text-base">
+          Filter through hundreds of natural language actions supported out-of-the-box by BenX V-2.0.
+        </p>
+      </div>
+
+      <!-- Search & Category Filters -->
+      <div class="max-w-3xl mx-auto mb-10 space-y-4">
+        <div class="relative">
+          <i data-lucide="search" class="w-4 h-4 text-cyan-400 absolute left-4 top-3.5"></i>
+          <input id="cmdSearchInput" type="text" placeholder="Search commands, e.g. 'workspace', 'wifi', 'screenshot', 'battery'..." 
+                 class="w-full pl-11 pr-4 py-3 rounded-xl bg-slate-900 border border-white/15 focus:border-cyan-400 focus:outline-none text-sm font-mono text-white placeholder-slate-500">
+        </div>
+
+        <div class="flex flex-wrap gap-2 justify-center">
+          <button class="cmd-filter-pill px-3.5 py-1.5 rounded-lg text-xs font-mono bg-cyan-500 text-slate-950 font-bold transition-all" data-category="all">All Commands</button>
+          <button class="cmd-filter-pill px-3.5 py-1.5 rounded-lg text-xs font-mono bg-slate-800/80 text-slate-300 hover:text-white transition-all" data-category="hyprland">Hyprland & Windows</button>
+          <button class="cmd-filter-pill px-3.5 py-1.5 rounded-lg text-xs font-mono bg-slate-800/80 text-slate-300 hover:text-white transition-all" data-category="hardware">Hardware & Power</button>
+          <button class="cmd-filter-pill px-3.5 py-1.5 rounded-lg text-xs font-mono bg-slate-800/80 text-slate-300 hover:text-white transition-all" data-category="peripherals">Wayland Peripherals</button>
+          <button class="cmd-filter-pill px-3.5 py-1.5 rounded-lg text-xs font-mono bg-slate-800/80 text-slate-300 hover:text-white transition-all" data-category="ai">AI & Dev Tools</button>
+        </div>
+      </div>
+
+      <!-- Command Cards Grid -->
+      <div id="cmdCardsContainer" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        
+        <!-- Hyprland -->
+        <div class="cmd-card-item p-4 rounded-xl bg-slate-900/60 border border-white/10 hover:border-cyan-500/40 transition-all space-y-2" data-category="hyprland">
+          <div class="flex items-center justify-between text-[11px] font-mono">
+            <span class="text-cyan-400 font-semibold">Hyprland</span>
+            <span class="text-slate-500">hyprctl dispatch</span>
+          </div>
+          <div class="font-mono text-sm text-white font-medium">"switch to workspace 3"</div>
+          <p class="text-xs text-slate-400">Instantly changes active workspace on current monitor.</p>
+        </div>
+
+        <div class="cmd-card-item p-4 rounded-xl bg-slate-900/60 border border-white/10 hover:border-cyan-500/40 transition-all space-y-2" data-category="hyprland">
+          <div class="flex items-center justify-between text-[11px] font-mono">
+            <span class="text-cyan-400 font-semibold">Hyprland</span>
+            <span class="text-slate-500">hyprctl dispatch</span>
+          </div>
+          <div class="font-mono text-sm text-white font-medium">"move this window to workspace 2"</div>
+          <p class="text-xs text-slate-400">Transfers focused window to specified workspace.</p>
+        </div>
+
+        <div class="cmd-card-item p-4 rounded-xl bg-slate-900/60 border border-white/10 hover:border-cyan-500/40 transition-all space-y-2" data-category="hyprland">
+          <div class="flex items-center justify-between text-[11px] font-mono">
+            <span class="text-cyan-400 font-semibold">Hyprland</span>
+            <span class="text-slate-500">hyprctl dispatch</span>
+          </div>
+          <div class="font-mono text-sm text-white font-medium">"toggle floating"</div>
+          <p class="text-xs text-slate-400">Switches focused window between tiled and floating mode.</p>
+        </div>
+
+        <div class="cmd-card-item p-4 rounded-xl bg-slate-900/60 border border-white/10 hover:border-cyan-500/40 transition-all space-y-2" data-category="hyprland">
+          <div class="flex items-center justify-between text-[11px] font-mono">
+            <span class="text-cyan-400 font-semibold">Hyprland</span>
+            <span class="text-slate-500">layouts engine</span>
+          </div>
+          <div class="font-mono text-sm text-white font-medium">"save current layout as work"</div>
+          <p class="text-xs text-slate-400">Saves all window geometries into ~/.benx/layouts/work.json.</p>
+        </div>
+
+        <div class="cmd-card-item p-4 rounded-xl bg-slate-900/60 border border-white/10 hover:border-cyan-500/40 transition-all space-y-2" data-category="hyprland">
+          <div class="flex items-center justify-between text-[11px] font-mono">
+            <span class="text-cyan-400 font-semibold">Hyprland</span>
+            <span class="text-slate-500">layouts engine</span>
+          </div>
+          <div class="font-mono text-sm text-white font-medium">"restore work layout"</div>
+          <p class="text-xs text-slate-400">Restores saved window layout and workspaces across displays.</p>
+        </div>
+
+        <div class="cmd-card-item p-4 rounded-xl bg-slate-900/60 border border-white/10 hover:border-cyan-500/40 transition-all space-y-2" data-category="hyprland">
+          <div class="flex items-center justify-between text-[11px] font-mono">
+            <span class="text-cyan-400 font-semibold">Hyprland</span>
+            <span class="text-slate-500">hyprctl dispatch</span>
+          </div>
+          <div class="font-mono text-sm text-white font-medium">"toggle special workspace"</div>
+          <p class="text-xs text-slate-400">Opens or hides the scratchpad special workspace.</p>
+        </div>
+
+        <!-- Hardware & Power -->
+        <div class="cmd-card-item p-4 rounded-xl bg-slate-900/60 border border-white/10 hover:border-purple-500/40 transition-all space-y-2" data-category="hardware">
+          <div class="flex items-center justify-between text-[11px] font-mono">
+            <span class="text-purple-400 font-semibold">Hardware</span>
+            <span class="text-slate-500">powerprofilesctl</span>
+          </div>
+          <div class="font-mono text-sm text-white font-medium">"set power profile to power-saver"</div>
+          <p class="text-xs text-slate-400">Scales CPU governor down for extended battery operation.</p>
+        </div>
+
+        <div class="cmd-card-item p-4 rounded-xl bg-slate-900/60 border border-white/10 hover:border-purple-500/40 transition-all space-y-2" data-category="hardware">
+          <div class="flex items-center justify-between text-[11px] font-mono">
+            <span class="text-purple-400 font-semibold">Hardware</span>
+            <span class="text-slate-500">upower</span>
+          </div>
+          <div class="font-mono text-sm text-white font-medium">"what is my battery level?"</div>
+          <p class="text-xs text-slate-400">Reports percentage, discharge rate, time remaining, and battery health.</p>
+        </div>
+
+        <div class="cmd-card-item p-4 rounded-xl bg-slate-900/60 border border-white/10 hover:border-purple-500/40 transition-all space-y-2" data-category="hardware">
+          <div class="flex items-center justify-between text-[11px] font-mono">
+            <span class="text-purple-400 font-semibold">Hardware</span>
+            <span class="text-slate-500">nmcli</span>
+          </div>
+          <div class="font-mono text-sm text-white font-medium">"scan for wifi networks"</div>
+          <p class="text-xs text-slate-400">Scans 2.4/5GHz access points and lists signal strengths.</p>
+        </div>
+
+        <div class="cmd-card-item p-4 rounded-xl bg-slate-900/60 border border-white/10 hover:border-purple-500/40 transition-all space-y-2" data-category="hardware">
+          <div class="flex items-center justify-between text-[11px] font-mono">
+            <span class="text-purple-400 font-semibold">Hardware</span>
+            <span class="text-slate-500">bluetoothctl</span>
+          </div>
+          <div class="font-mono text-sm text-white font-medium">"list connected bluetooth devices"</div>
+          <p class="text-xs text-slate-400">Enumerates paired headphones, keyboards, and battery levels.</p>
+        </div>
+
+        <div class="cmd-card-item p-4 rounded-xl bg-slate-900/60 border border-white/10 hover:border-purple-500/40 transition-all space-y-2" data-category="hardware">
+          <div class="flex items-center justify-between text-[11px] font-mono">
+            <span class="text-purple-400 font-semibold">Hardware</span>
+            <span class="text-slate-500">systemctl</span>
+          </div>
+          <div class="font-mono text-sm text-white font-medium">"restart service bluetooth"</div>
+          <p class="text-xs text-slate-400">Safely restarts user/system services with confirmation guards.</p>
+        </div>
+
+        <div class="cmd-card-item p-4 rounded-xl bg-slate-900/60 border border-white/10 hover:border-purple-500/40 transition-all space-y-2" data-category="hardware">
+          <div class="flex items-center justify-between text-[11px] font-mono">
+            <span class="text-purple-400 font-semibold">Hardware</span>
+            <span class="text-slate-500">pacman / yay</span>
+          </div>
+          <div class="font-mono text-sm text-white font-medium">"check for system updates"</div>
+          <p class="text-xs text-slate-400">Checks Arch Linux official and AUR packages pending upgrade.</p>
+        </div>
+
+        <!-- Peripherals -->
+        <div class="cmd-card-item p-4 rounded-xl bg-slate-900/60 border border-white/10 hover:border-emerald-500/40 transition-all space-y-2" data-category="peripherals">
+          <div class="flex items-center justify-between text-[11px] font-mono">
+            <span class="text-emerald-400 font-semibold">Peripherals</span>
+            <span class="text-slate-500">grim + slurp</span>
+          </div>
+          <div class="font-mono text-sm text-white font-medium">"screenshot a region"</div>
+          <p class="text-xs text-slate-400">Interactive bounding box selection copied to clipboard & disk.</p>
+        </div>
+
+        <div class="cmd-card-item p-4 rounded-xl bg-slate-900/60 border border-white/10 hover:border-emerald-500/40 transition-all space-y-2" data-category="peripherals">
+          <div class="flex items-center justify-between text-[11px] font-mono">
+            <span class="text-emerald-400 font-semibold">Peripherals</span>
+            <span class="text-slate-500">wf-recorder</span>
+          </div>
+          <div class="font-mono text-sm text-white font-medium">"start screen recording"</div>
+          <p class="text-xs text-slate-400">Records Wayland video with audio exclusion rules active.</p>
+        </div>
+
+        <div class="cmd-card-item p-4 rounded-xl bg-slate-900/60 border border-white/10 hover:border-emerald-500/40 transition-all space-y-2" data-category="peripherals">
+          <div class="flex items-center justify-between text-[11px] font-mono">
+            <span class="text-emerald-400 font-semibold">Peripherals</span>
+            <span class="text-slate-500">cliphist</span>
+          </div>
+          <div class="font-mono text-sm text-white font-medium">"search clipboard for github"</div>
+          <p class="text-xs text-slate-400">Fuzzy searches clipboard buffer history for match.</p>
+        </div>
+
+        <div class="cmd-card-item p-4 rounded-xl bg-slate-900/60 border border-white/10 hover:border-emerald-500/40 transition-all space-y-2" data-category="peripherals">
+          <div class="flex items-center justify-between text-[11px] font-mono">
+            <span class="text-emerald-400 font-semibold">Peripherals</span>
+            <span class="text-slate-500">hyprlock</span>
+          </div>
+          <div class="font-mono text-sm text-white font-medium">"lock the screen"</div>
+          <p class="text-xs text-slate-400">Activates hyprlock PAM authentication with blurred backdrop.</p>
+        </div>
+
+        <!-- AI & Dev Tools -->
+        <div class="cmd-card-item p-4 rounded-xl bg-slate-900/60 border border-white/10 hover:border-pink-500/40 transition-all space-y-2" data-category="ai">
+          <div class="flex items-center justify-between text-[11px] font-mono">
+            <span class="text-pink-400 font-semibold">AI & Vision</span>
+            <span class="text-slate-500">Tesseract + Llama 4</span>
+          </div>
+          <div class="font-mono text-sm text-white font-medium">"analyze my screen"</div>
+          <p class="text-xs text-slate-400">Extracts text and diagnoses issues or errors visible on display.</p>
+        </div>
+
+        <div class="cmd-card-item p-4 rounded-xl bg-slate-900/60 border border-white/10 hover:border-pink-500/40 transition-all space-y-2" data-category="ai">
+          <div class="flex items-center justify-between text-[11px] font-mono">
+            <span class="text-pink-400 font-semibold">AI & Dev</span>
+            <span class="text-slate-500">Groq Llama 3.3 70B</span>
+          </div>
+          <div class="font-mono text-sm text-white font-medium">"analyze this project"</div>
+          <p class="text-xs text-slate-400">Inspects code repository structure, dependencies, and git status.</p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       SECTION 7: QUICK START & INSTALLATION
+       ========================================================================== -->
+  <section id="quickstart" class="py-20 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-12 space-y-4">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 text-xs font-mono">
+          <i data-lucide="play-circle" class="w-3.5 h-3.5"></i> Up and Running in 60 Seconds
+        </div>
+        <h2 class="font-tech text-3xl sm:text-4xl font-extrabold text-white tracking-wide">
+          Install BenX on Your System
+        </h2>
+        <p class="text-slate-400 text-base">
+          Choose your distribution below. BenX is tested on Arch Linux, Hyprland, Ubuntu, and Fedora.
+        </p>
+      </div>
+
+      <!-- Tabbed Installation Container -->
+      <div class="max-w-4xl mx-auto glass-panel rounded-2xl overflow-hidden border border-white/15">
+        
+        <!-- Tab Headers -->
+        <div class="flex border-b border-white/10 bg-slate-950/80 font-mono text-xs overflow-x-auto">
+          <button class="qs-tab-btn px-6 py-3.5 border-b-2 border-cyan-400 text-cyan-400 bg-cyan-500/10 font-bold transition-all" data-tab="tab-arch">
+            Arch Linux / Hyprland (Recommended)
+          </button>
+          <button class="qs-tab-btn px-6 py-3.5 border-b-2 border-transparent text-slate-400 hover:text-white transition-all" data-tab="tab-ubuntu">
+            Ubuntu / Debian
+          </button>
+          <button class="qs-tab-btn px-6 py-3.5 border-b-2 border-transparent text-slate-400 hover:text-white transition-all" data-tab="tab-fedora">
+            Fedora
+          </button>
+          <button class="qs-tab-btn px-6 py-3.5 border-b-2 border-transparent text-slate-400 hover:text-white transition-all" data-tab="tab-cli">
+            Headless / CLI Mode
+          </button>
+        </div>
+
+        <!-- Tab 1: Arch Linux -->
+        <div id="tab-arch" class="qs-tab-pane p-6 sm:p-8 space-y-6">
+          <div class="space-y-2">
+            <span class="text-xs font-mono text-cyan-400 font-semibold">1. Install System Dependencies via Pacman</span>
+            <div class="code-box p-3.5 rounded-xl bg-slate-950 border border-white/10 flex items-center justify-between font-mono text-xs text-slate-300">
+              <code>sudo pacman -S gtk4 libadwaita grim slurp cliphist wl-clipboard ydotool networkmanager python</code>
+              <button class="btn-copy p-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300"><i data-lucide="copy" class="w-3.5 h-3.5"></i></button>
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <span class="text-xs font-mono text-cyan-400 font-semibold">2. Clone & Run Auto-Setup Script</span>
+            <div class="code-box p-3.5 rounded-xl bg-slate-950 border border-white/10 flex items-center justify-between font-mono text-xs text-slate-300">
+              <code>git clone https://github.com/NateshKannaR/BenX-Assisto_V-2.0.git && cd BenX-Assisto_V-2.0 && ./setup_and_run.sh</code>
+              <button class="btn-copy p-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300"><i data-lucide="copy" class="w-3.5 h-3.5"></i></button>
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <span class="text-xs font-mono text-cyan-400 font-semibold">3. Export Free Groq API Key</span>
+            <div class="code-box p-3.5 rounded-xl bg-slate-950 border border-white/10 flex items-center justify-between font-mono text-xs text-slate-300">
+              <code>echo 'export GROQ_API_KEY="gsk_your_groq_key_here"' >> ~/.bashrc && source ~/.bashrc</code>
+              <button class="btn-copy p-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300"><i data-lucide="copy" class="w-3.5 h-3.5"></i></button>
+            </div>
+          </div>
+
+          <div class="p-3 rounded-xl bg-emerald-950/40 border border-emerald-500/30 text-emerald-300 text-xs font-mono flex items-center gap-2">
+            <i data-lucide="check-circle" class="w-4 h-4 shrink-0"></i>
+            <span>Ready! Launch anytime with <code>python benx.py</code> (GTK4) or <code>python benx_tui.py</code> (TUI).</span>
+          </div>
+        </div>
+
+        <!-- Tab 2: Ubuntu -->
+        <div id="tab-ubuntu" class="qs-tab-pane hidden p-6 sm:p-8 space-y-6">
+          <div class="space-y-2">
+            <span class="text-xs font-mono text-cyan-400 font-semibold">1. Install System Dependencies via APT</span>
+            <div class="code-box p-3.5 rounded-xl bg-slate-950 border border-white/10 flex items-center justify-between font-mono text-xs text-slate-300">
+              <code>sudo apt update && sudo apt install -y libgtk-4-1 libadwaita-1-0 python3-pip wl-clipboard</code>
+              <button class="btn-copy p-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300"><i data-lucide="copy" class="w-3.5 h-3.5"></i></button>
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <span class="text-xs font-mono text-cyan-400 font-semibold">2. Clone and Setup Environment</span>
+            <div class="code-box p-3.5 rounded-xl bg-slate-950 border border-white/10 flex items-center justify-between font-mono text-xs text-slate-300">
+              <code>git clone https://github.com/NateshKannaR/BenX-Assisto_V-2.0.git && cd BenX-Assisto_V-2.0 && pip install -r requirements.txt</code>
+              <button class="btn-copy p-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300"><i data-lucide="copy" class="w-3.5 h-3.5"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 3: Fedora -->
+        <div id="tab-fedora" class="qs-tab-pane hidden p-6 sm:p-8 space-y-6">
+          <div class="space-y-2">
+            <span class="text-xs font-mono text-cyan-400 font-semibold">1. Install Dependencies via DNF</span>
+            <div class="code-box p-3.5 rounded-xl bg-slate-950 border border-white/10 flex items-center justify-between font-mono text-xs text-slate-300">
+              <code>sudo dnf install -y gtk4 libadwaita grim slurp wl-clipboard python3-pip</code>
+              <button class="btn-copy p-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300"><i data-lucide="copy" class="w-3.5 h-3.5"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 4: CLI Mode -->
+        <div id="tab-cli" class="qs-tab-pane hidden p-6 sm:p-8 space-y-6">
+          <div class="space-y-2">
+            <span class="text-xs font-mono text-cyan-400 font-semibold">Headless / No-GUI Mode</span>
+            <div class="code-box p-3.5 rounded-xl bg-slate-950 border border-white/10 flex items-center justify-between font-mono text-xs text-slate-300">
+              <code>python3 benx.py --no-gui</code>
+              <button class="btn-copy p-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300"><i data-lucide="copy" class="w-3.5 h-3.5"></i></button>
+            </div>
+          </div>
+          <div class="space-y-2">
+            <span class="text-xs font-mono text-cyan-400 font-semibold">Run Automated Self-Diagnostics</span>
+            <div class="code-box p-3.5 rounded-xl bg-slate-950 border border-white/10 flex items-center justify-between font-mono text-xs text-slate-300">
+              <code>python3 test_benx.py</code>
+              <button class="btn-copy p-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300"><i data-lucide="copy" class="w-3.5 h-3.5"></i></button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       SECTION 8: FOOTER & REPOSITORY CREDITS
+       ========================================================================== -->
+  <footer class="bg-[#05070a] border-t border-white/10 pt-16 pb-12 font-mono text-xs text-slate-400">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="grid md:grid-cols-4 gap-8 pb-12 border-b border-white/10">
+        
+        <div class="space-y-3 col-span-2">
+          <div class="flex items-center gap-2">
+            <span class="font-tech text-xl font-bold text-white tracking-wider">BenX<span class="text-cyan-400">.</span></span>
+            <span class="text-[10px] px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800">V-2.0</span>
+          </div>
+          <p class="text-slate-400 text-xs max-w-sm leading-relaxed">
+            Advanced sovereign AI desktop assistant tailored for Arch Linux and Hyprland (Wayland), with hardware governance, Groq intelligence, and Libadwaita glassmorphism.
+          </p>
+          <div class="text-[11px] text-slate-500 pt-2">
+            Created with ❤️ by <a href="https://github.com/NateshKannaR" class="text-cyan-400 hover:underline">NateshKannaR</a>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <strong class="text-white block font-sans text-sm">Repository</strong>
+          <div><a href="https://github.com/NateshKannaR/BenX-Assisto_V-2.0" class="hover:text-cyan-400 transition-colors">GitHub Repository</a></div>
+          <div><a href="https://github.com/NateshKannaR/BenX-Assisto_V-2.0/issues" class="hover:text-cyan-400 transition-colors">Issues & Roadmap</a></div>
+          <div><a href="https://github.com/NateshKannaR/BenX-Assisto_V-2.0/pulls" class="hover:text-cyan-400 transition-colors">Contributions</a></div>
+          <div><a href="https://github.com/NateshKannaR/BenX-Assisto_V-2.0/blob/main/README.md" class="hover:text-cyan-400 transition-colors">Documentation</a></div>
+        </div>
+
+        <div class="space-y-2">
+          <strong class="text-white block font-sans text-sm">Tech Stack</strong>
+          <div>• Arch Linux / Hyprland (Wayland)</div>
+          <div>• GTK4 & Libadwaita</div>
+          <div>• Groq LPU (Llama 3.3 70B, Qwen3)</div>
+          <div>• Cairo 30fps Waveform Canvas</div>
+          <div>• MIT License • Open Source</div>
+        </div>
+
+      </div>
+
+      <div class="flex flex-col sm:flex-row items-center justify-between pt-8 gap-4 text-[11px] text-slate-500">
+        <div>© 2026 BenX AI Project. Released under the MIT License.</div>
+        <div class="flex items-center gap-4">
+          <a href="#how-it-works" class="hover:text-slate-300">How It Works</a>
+          <a href="#simulator" class="hover:text-slate-300">Simulator</a>
+          <a href="#features" class="hover:text-slate-300">Features</a>
+          <a href="#quickstart" class="hover:text-slate-300">Quick Start</a>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- Initialize Lucide Icons -->
+  <script>
+    lucide.createIcons();
+  </script>
+
+  <!-- Application Engine -->
+  <script src="js/app.js"></script>
+</body>
+</html>
