@@ -60,6 +60,10 @@
 
       <!-- Desktop Links -->
       <nav class="hidden md:flex items-center gap-7 text-xs font-medium text-zinc-400">
+        <a href="#demo" class="hover:text-white transition-colors flex items-center gap-1">
+          <i data-lucide="play-circle" class="w-3.5 h-3.5 text-zinc-300"></i>
+          <span>Live Demo</span>
+        </a>
         <a href="#architecture" class="hover:text-white transition-colors">Architecture</a>
         <a href="#capabilities" class="hover:text-white transition-colors">Bento Matrix</a>
         <a href="#inspector" class="hover:text-white transition-colors flex items-center gap-1.5">
@@ -88,7 +92,7 @@
   <!-- ==========================================================================
        HERO SECTION
        ========================================================================== -->
-  <section class="relative pt-36 pb-24 md:pt-44 md:pb-36 overflow-hidden">
+  <section class="relative pt-36 pb-20 md:pt-44 md:pb-24 overflow-hidden">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
       
       <!-- Precision Pill -->
@@ -111,69 +115,160 @@
 
       <!-- Action Buttons -->
       <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
-        <a href="#quickstart" 
-           class="px-5 py-2.5 rounded-xl text-xs font-semibold text-black bg-white hover:bg-zinc-200 transition-all shadow-[0_0_24px_rgba(255,255,255,0.2)]">
-          Install BenX Runtime
+        <a href="#demo" 
+           class="px-5 py-2.5 rounded-xl text-xs font-semibold text-black bg-white hover:bg-zinc-200 transition-all shadow-[0_0_24px_rgba(255,255,255,0.2)] flex items-center gap-2">
+          <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
+          <span>Watch 2-Min Live Walkthrough</span>
         </a>
-        <a href="#architecture" 
+        <a href="#quickstart" 
            class="px-5 py-2.5 rounded-xl text-xs font-mono text-zinc-300 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] hover:border-white/20 transition-all">
-          Explore Architecture
+          Install BenX Runtime
         </a>
       </div>
 
-      <!-- Hero Visual Cockpit: Wayland Window & Telemetry -->
-      <div class="pt-10 max-w-4xl mx-auto">
-        <div class="bento-card p-5 sm:p-6 text-left space-y-5 border border-white/[0.08] shadow-[0_20px_50px_rgba(0,0,0,0.8)]">
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       SECTION: INTERACTIVE VIDEO DEMO THEATER
+       ========================================================================== -->
+  <section id="demo" class="py-12 md:py-20 relative">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+      
+      <!-- Video Frame Header -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-white/[0.08]">
+        <div>
+          <span class="badge-pill mb-2">Live Session Recording</span>
+          <h2 class="text-xl sm:text-2xl font-semibold text-white tracking-tight flex items-center gap-2">
+            <span>BenX Desktop Session Demo</span>
+            <span class="text-xs font-mono px-2 py-0.5 rounded-full bg-white/[0.06] text-zinc-400">02:00</span>
+          </h2>
+        </div>
+        
+        <!-- Live Chapter Jump Markers -->
+        <div class="flex items-center gap-1.5 overflow-x-auto pb-1 max-w-full">
+          <button class="chapter-btn active-chapter" data-time="0">0:00 UI & HUD</button>
+          <button class="chapter-btn" data-time="28">0:28 Waveform</button>
+          <button class="chapter-btn" data-time="54">0:54 Hyprland</button>
+          <button class="chapter-btn" data-time="80">1:20 Hardware</button>
+          <button class="chapter-btn" data-time="105">1:45 Safety Gate</button>
+        </div>
+      </div>
+
+      <!-- Video Player Theater Window -->
+      <div class="video-theater-wrapper group">
+        
+        <!-- Window Titlebar -->
+        <div class="px-4 py-2.5 bg-zinc-950/90 border-b border-white/[0.06] flex items-center justify-between font-mono text-xs text-zinc-400 select-none">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-zinc-700"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-zinc-700"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-zinc-700"></span>
+            <span class="ml-2 text-zinc-300 text-[11px]">benx-desktop-session :: Arch Linux + Hyprland (Wayland)</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="text-[10px] font-mono text-emerald-400 flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              WAYLAND 60FPS
+            </span>
+          </div>
+        </div>
+
+        <!-- Video Element & Overlay -->
+        <div class="relative bg-black aspect-video flex items-center justify-center">
           
-          <!-- Window Header -->
-          <div class="flex items-center justify-between pb-3 border-b border-white/[0.06]">
-            <div class="flex items-center gap-2">
-              <span class="w-2.5 h-2.5 rounded-full bg-zinc-700"></span>
-              <span class="w-2.5 h-2.5 rounded-full bg-zinc-700"></span>
-              <span class="w-2.5 h-2.5 rounded-full bg-zinc-700"></span>
-              <span class="text-xs font-mono text-zinc-400 ml-2">benx-daemon (Hyprland Wayland IPC)</span>
-            </div>
-            <div class="flex items-center gap-3">
-              <span id="spectrumBadge" class="text-[10px] font-mono px-2 py-0.5 rounded-full border border-white/10 text-zinc-400 bg-white/[0.02]">
-                LISTENING
-              </span>
-              <span class="text-xs font-mono text-emerald-400 flex items-center gap-1.5">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                ACTIVE
-              </span>
-            </div>
-          </div>
+          <video id="demoVideo" 
+                 preload="metadata" 
+                 poster="assets/demo-poster.jpg" 
+                 playsinline
+                 class="w-full h-full object-cover">
+            <source src="assets/demo.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
 
-          <!-- Studio Spectrum Analyzer -->
-          <div class="p-3.5 rounded-xl bg-black/60 border border-white/[0.04] space-y-2">
-            <div class="flex items-center justify-between text-[11px] font-mono text-zinc-500">
-              <span>Cairo 60Hz Acoustic Spectrum Stream</span>
-              <span>WakeWord: "Hey BenX"</span>
-            </div>
-            <canvas id="audioSpectrumCanvas"></canvas>
-          </div>
-
-          <!-- Metric Row -->
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono text-xs">
-            <div class="p-3 rounded-xl bg-white/[0.02] border border-white/[0.05]">
-              <span class="text-[10px] text-zinc-500 uppercase block">Compositor</span>
-              <span class="text-zinc-200 font-medium">Hyprland Wayland</span>
-            </div>
-            <div class="p-3 rounded-xl bg-white/[0.02] border border-white/[0.05]">
-              <span class="text-[10px] text-zinc-500 uppercase block">Inference TTFT</span>
-              <span class="text-zinc-200 font-medium">68ms (Groq LPU)</span>
-            </div>
-            <div class="p-3 rounded-xl bg-white/[0.02] border border-white/[0.05]">
-              <span class="text-[10px] text-zinc-500 uppercase block">RAM Footprint</span>
-              <span id="liveMemStat" class="text-zinc-200 font-medium">42MB RSS</span>
-            </div>
-            <div class="p-3 rounded-xl bg-white/[0.02] border border-white/[0.05]">
-              <span class="text-[10px] text-zinc-500 uppercase block">CPU Daemon Load</span>
-              <span id="liveCpuStat" class="text-zinc-200 font-medium">2.1%</span>
+          <!-- Play Button Glass Overlay -->
+          <div id="videoOverlay" class="video-overlay-play">
+            <div class="play-circle-btn">
+              <i data-lucide="play" class="w-8 h-8 fill-current ml-1"></i>
             </div>
           </div>
 
         </div>
+
+        <!-- Video Custom Controls Bar -->
+        <div class="px-4 py-3 bg-zinc-950/95 border-t border-white/[0.06] space-y-2">
+          
+          <!-- Scrubber Timeline -->
+          <input id="videoScrubber" type="range" min="0" max="100" value="0" step="0.1" class="video-scrubber">
+
+          <div class="flex items-center justify-between text-xs font-mono text-zinc-400">
+            <div class="flex items-center gap-3">
+              <!-- Play / Pause Button -->
+              <button id="videoPlayBtn" class="p-1 rounded hover:text-white transition-colors" title="Play / Pause">
+                <i id="playIcon" data-lucide="play" class="w-4 h-4 fill-current"></i>
+                <i id="pauseIcon" data-lucide="pause" class="w-4 h-4 hidden"></i>
+              </button>
+
+              <!-- Mute / Unmute Button -->
+              <button id="videoMuteBtn" class="p-1 rounded hover:text-white transition-colors" title="Mute / Unmute">
+                <i id="volumeIcon" data-lucide="volume-2" class="w-4 h-4"></i>
+                <i id="muteIcon" data-lucide="volume-x" class="w-4 h-4 hidden"></i>
+              </button>
+
+              <span id="videoTimeDisplay" class="text-[11px] text-zinc-300">00:00 / 02:00</span>
+            </div>
+
+            <div class="flex items-center gap-4">
+              <span class="hidden sm:inline text-[11px] text-zinc-500">720p H.264 WebFaststart</span>
+              <button id="videoFullscreenBtn" class="p-1 rounded hover:text-white transition-colors" title="Fullscreen">
+                <i data-lucide="maximize" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Key Takeaways Grid Below Video -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 font-mono text-xs">
+        <div class="p-3.5 rounded-xl bg-white/[0.02] border border-white/[0.06] space-y-1">
+          <span class="text-zinc-500 block text-[10px] uppercase">Compositor Execution</span>
+          <strong class="text-zinc-200">Native Wayland IPC</strong>
+          <p class="text-[11px] font-sans text-zinc-400">Zero screen flicker, direct socket2 window dispatch.</p>
+        </div>
+
+        <div class="p-3.5 rounded-xl bg-white/[0.02] border border-white/[0.06] space-y-1">
+          <span class="text-zinc-500 block text-[10px] uppercase">Inference Speed</span>
+          <strong class="text-zinc-200">68ms TTFT on Groq</strong>
+          <p class="text-[11px] font-sans text-zinc-400">High-throughput LPU intelligence responding instantly.</p>
+        </div>
+
+        <div class="p-3.5 rounded-xl bg-white/[0.02] border border-white/[0.06] space-y-1">
+          <span class="text-zinc-500 block text-[10px] uppercase">Acoustic Feedback</span>
+          <strong class="text-zinc-200">Cairo 60Hz Waveform</strong>
+          <p class="text-[11px] font-sans text-zinc-400">Tactile visual audio spectrum responding to speech.</p>
+        </div>
+
+        <div class="p-3.5 rounded-xl bg-white/[0.02] border border-white/[0.06] space-y-1">
+          <span class="text-zinc-500 block text-[10px] uppercase">Safety Guarantee</span>
+          <strong class="text-zinc-200">Gated Destruction</strong>
+          <p class="text-[11px] font-sans text-zinc-400">Strict confirmation prompt before root or kill actions.</p>
+        </div>
+      </div>
+
+      <!-- Studio Spectrum Analyzer Linked to Audio -->
+      <div class="bento-card p-4 space-y-2">
+        <div class="flex items-center justify-between text-[11px] font-mono text-zinc-400">
+          <span class="flex items-center gap-2">
+            <i data-lucide="audio-lines" class="w-3.5 h-3.5 text-zinc-300"></i>
+            <span>Real-time Studio Spectrum Analyzer</span>
+          </span>
+          <span id="spectrumBadge" class="text-[10px] font-mono px-2 py-0.5 rounded-full border border-white/10 text-zinc-400 bg-white/[0.02]">
+            LISTENING
+          </span>
+        </div>
+        <canvas id="audioSpectrumCanvas"></canvas>
       </div>
 
     </div>
@@ -820,6 +915,7 @@
       <div class="flex flex-col sm:flex-row items-center justify-between pt-8 gap-4 text-[11px] text-zinc-500">
         <div>© 2026 BenX Open Source Project.</div>
         <div class="flex items-center gap-6">
+          <a href="#demo" class="hover:text-zinc-300">Live Demo</a>
           <a href="#architecture" class="hover:text-zinc-300">Architecture</a>
           <a href="#capabilities" class="hover:text-zinc-300">Capabilities</a>
           <a href="#inspector" class="hover:text-zinc-300">Inspector</a>

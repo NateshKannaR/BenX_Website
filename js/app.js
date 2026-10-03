@@ -1,7 +1,8 @@
 /**
  * BenX Developer Runtime - Client Engine
  * High-performance interactive engine featuring:
- * - Minimalist Audio Spectrum Visualizer
+ * - Studio Audio Spectrum Visualizer
+ * - Video Demo Player Controller & Chapter Navigation
  * - Raycast-Style Command Inspector & JSON Viewer
  * - Architecture Step Navigator
  * - Live Command Filter & Search
@@ -10,6 +11,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   initAudioSpectrum();
+  initVideoPlayer();
   initCommandInspector();
   initArchitecturePipeline();
   initCommandSearch();
@@ -23,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
    1. Minimalist Audio Spectrum Visualizer
    Clean high-density frequency bars inspired by studio telemetry
    ========================================================================== */
-let spectrumState = 'listening'; // 'idle' | 'listening' | 'executing'
+let spectrumState = 'listening'; // 'idle' | 'listening' | 'executing' | 'playing'
 
 function initAudioSpectrum() {
   const canvas = document.getElementById('audioSpectrumCanvas');
@@ -38,7 +40,7 @@ function initAudioSpectrum() {
   window.addEventListener('resize', resize);
 
   let phase = 0;
-  const barCount = 40;
+  const barCount = 44;
 
   function render() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -46,7 +48,8 @@ function initAudioSpectrum() {
     const height = canvas.height;
     const barWidth = Math.max(2, (width / barCount) - 3);
 
-    phase += (spectrumState === 'executing' ? 0.08 : 0.04);
+    const speed = spectrumState === 'playing' ? 0.12 : spectrumState === 'executing' ? 0.08 : 0.04;
+    phase += speed;
 
     for (let i = 0; i < barCount; i++) {
       const x = i * (width / barCount);
@@ -57,16 +60,16 @@ function initAudioSpectrum() {
       } else if (spectrumState === 'listening') {
         const centerFactor = 1 - Math.abs(i - barCount / 2) / (barCount / 2);
         amplitude = 4 + centerFactor * 18 * (0.6 + Math.sin(phase * 2 + i * 0.4) * 0.4);
-      } else if (spectrumState === 'executing') {
-        amplitude = 6 + Math.sin(phase * 3 + i * 0.6) * 12;
+      } else if (spectrumState === 'executing' || spectrumState === 'playing') {
+        const centerFactor = 1 - Math.abs(i - barCount / 2) / (barCount / 2);
+        amplitude = 6 + Math.sin(phase * 3 + i * 0.5) * 12 + centerFactor * 14;
       }
 
       amplitude = Math.max(2, Math.min(height - 4, amplitude));
       const y = height - amplitude;
 
-      // Subtle monochromatic gradient
       const grad = ctx.createLinearGradient(0, y, 0, height);
-      if (spectrumState === 'executing') {
+      if (spectrumState === 'executing' || spectrumState === 'playing') {
         grad.addColorStop(0, 'rgba(255, 255, 255, 0.95)');
         grad.addColorStop(1, 'rgba(255, 255, 255, 0.2)');
       } else {
@@ -90,7 +93,7 @@ function setSpectrumState(state) {
   if (badge) {
     badge.textContent = state.toUpperCase();
     badge.className = `text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full border ${
-      state === 'executing' 
+      state === 'executing' || state === 'playing'
         ? 'border-white/30 text-white bg-white/10' 
         : 'border-white/10 text-zinc-400 bg-white/[0.02]'
     }`;
@@ -98,7 +101,141 @@ function setSpectrumState(state) {
 }
 
 /* ==========================================================================
-   2. Raycast-Style Command Inspector & JSON Viewer
+   2. Video Demo Player Controller & Chapter Navigation
+   ========================================================================== */
+function initVideoPlayer() {
+  const video = document.getElementById('demoVideo');
+  const overlay = document.getElementById('videoOverlay');
+  const playBtn = document.getElementById('videoPlayBtn');
+  const playIcon = document.getElementById('playIcon');
+  const pauseIcon = document.getElementById('pauseIcon');
+  const scrubber = document.getElementById('videoScrubber');
+  const timeDisplay = document.getElementById('videoTimeDisplay');
+  const muteBtn = document.getElementById('videoMuteBtn');
+  const volumeIcon = document.getElementById('volumeIcon');
+  const muteIcon = document.getElementById('muteIcon');
+  const fullscreenBtn = document.getElementById('videoFullscreenBtn');
+  const chapterBtns = document.querySelectorAll('.chapter-btn');
+
+  if (!video) return;
+
+  function formatTime(seconds) {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  }
+
+  function togglePlay() {
+    if (video.paused || video.ended) {
+      video.play();
+    } else {
+      video.pause();
+    }
+  }
+
+  if (overlay) {
+    overlay.addEventListener('click', togglePlay);
+  }
+
+  if (playBtn) {
+    playBtn.addEventListener('click', togglePlay);
+  }
+
+  video.addEventListener('play', () => {
+    if (overlay) overlay.classList.add('hidden-overlay');
+    if (playIcon) playIcon.classList.add('hidden');
+    if (pauseIcon) pauseIcon.classList.remove('hidden');
+    setSpectrumState('playing');
+  });
+
+  video.addEventListener('pause', () => {
+    if (overlay) overlay.classList.remove('hidden-overlay');
+    if (playIcon) playIcon.classList.remove('hidden');
+    if (pauseIcon) pauseIcon.classList.add('hidden');
+    setSpectrumState('listening');
+  });
+
+  video.addEventListener('ended', () => {
+    if (overlay) overlay.classList.remove('hidden-overlay');
+    if (playIcon) playIcon.classList.remove('hidden');
+    if (pauseIcon) pauseIcon.classList.add('hidden');
+    setSpectrumState('listening');
+  });
+
+  video.addEventListener('timeupdate', () => {
+    const curr = video.currentTime;
+    const dur = video.duration || 120;
+
+    if (scrubber) {
+      scrubber.value = (curr / dur) * 100;
+    }
+
+    if (timeDisplay) {
+      timeDisplay.textContent = `${formatTime(curr)} / ${formatTime(dur)}`;
+    }
+
+    // Update active chapter button
+    chapterBtns.forEach(btn => {
+      const time = parseFloat(btn.getAttribute('data-time') || '0');
+      const nextBtn = btn.nextElementSibling;
+      const nextTime = nextBtn ? parseFloat(nextBtn.getAttribute('data-time') || '999') : 999;
+
+      if (curr >= time && curr < nextTime) {
+        btn.classList.add('active-chapter');
+      } else {
+        btn.classList.remove('active-chapter');
+      }
+    });
+  });
+
+  if (scrubber) {
+    scrubber.addEventListener('input', () => {
+      const dur = video.duration || 120;
+      video.currentTime = (scrubber.value / 100) * dur;
+    });
+  }
+
+  // Audio Mute Toggle
+  if (muteBtn) {
+    muteBtn.addEventListener('click', () => {
+      video.muted = !video.muted;
+      if (video.muted) {
+        volumeIcon.classList.add('hidden');
+        muteIcon.classList.remove('hidden');
+      } else {
+        volumeIcon.classList.remove('hidden');
+        muteIcon.classList.add('hidden');
+      }
+    });
+  }
+
+  // Fullscreen
+  if (fullscreenBtn) {
+    fullscreenBtn.addEventListener('click', () => {
+      const container = video.closest('.video-theater-wrapper') || video;
+      if (!document.fullscreenElement) {
+        if (container.requestFullscreen) container.requestFullscreen();
+        else if (video.requestFullscreen) video.requestFullscreen();
+      } else {
+        if (document.exitFullscreen) document.exitFullscreen();
+      }
+    });
+  }
+
+  // Chapter Jump Buttons
+  chapterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const time = parseFloat(btn.getAttribute('data-time') || '0');
+      video.currentTime = time;
+      if (video.paused) {
+        video.play();
+      }
+    });
+  });
+}
+
+/* ==========================================================================
+   3. Raycast-Style Command Inspector & JSON Viewer
    ========================================================================== */
 const RUNTIME_COMMANDS = {
   "switch to workspace 3": {
@@ -346,7 +483,7 @@ function initCommandInspector() {
 }
 
 /* ==========================================================================
-   3. Architecture Pipeline Step Navigator
+   4. Architecture Pipeline Step Navigator
    ========================================================================== */
 const ARCH_MODULES = {
   1: {
@@ -436,7 +573,7 @@ function initArchitecturePipeline() {
 }
 
 /* ==========================================================================
-   4. Live Command Search & Filter
+   5. Live Command Search & Filter
    ========================================================================== */
 function initCommandSearch() {
   const searchInput = document.getElementById('commandSearchInput');
@@ -480,7 +617,7 @@ function initCommandSearch() {
 }
 
 /* ==========================================================================
-   5. Tabbed Quickstart Installer
+   6. Tabbed Quickstart Installer
    ========================================================================== */
 function initQuickstartTabs() {
   const tabBtns = document.querySelectorAll('.qs-tab');
@@ -512,7 +649,7 @@ function initQuickstartTabs() {
 }
 
 /* ==========================================================================
-   6. Minimal Clipboard Handler with Inline Toast
+   7. Minimal Clipboard Handler with Inline Toast
    ========================================================================== */
 function initClipboardHandlers() {
   document.querySelectorAll('.copy-btn').forEach(btn => {
@@ -532,7 +669,7 @@ function initClipboardHandlers() {
 }
 
 /* ==========================================================================
-   7. Keyboard Shortcuts (Cmd+K / Ctrl+K focus)
+   8. Keyboard Shortcuts (Cmd+K / Ctrl+K focus)
    ========================================================================== */
 function initKeyboardShortcuts() {
   window.addEventListener('keydown', (e) => {
@@ -548,7 +685,7 @@ function initKeyboardShortcuts() {
 }
 
 /* ==========================================================================
-   8. Live Telemetry Metric Ticker
+   9. Live Telemetry Metric Ticker
    ========================================================================== */
 function initLiveTelemetry() {
   const memEl = document.getElementById('liveMemStat');
