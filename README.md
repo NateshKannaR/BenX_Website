@@ -1,45 +1,23 @@
-# BenX-AI V-2.0 Showcase Website
+# BenX showcase
 
-A futuristic, high-performance showcase website for [BenX-Assisto V-2.0](https://github.com/NateshKannaR/BenX-Assisto_V-2.0.git) — the sovereign AI desktop assistant tailored for Arch Linux and Hyprland (Wayland).
+The documentation site for [BenX-Assisto V-2.0](https://github.com/NateshKannaR/BenX-Assisto_V-2.0), a Linux desktop assistant for Arch Linux and Hyprland.
 
-## 🌟 Highlights
-- **Interactive "How It Works" Pipeline**: Detailed visual breakdown of audio ingestion, Groq/OpenRouter multi-model intelligence, ironclad safety guardrails (`CONFIRM_ACTIONS`), and native Wayland/Hyprland IPC execution.
-- **Interactive Live Simulator / Command Playground**: Try real-world natural language commands, watch dynamic Cairo 30fps waveforms, inspect AI routing latency, and see simulated desktop reactions.
-- **Triple User Interface Showcase**: Previews for GTK4/Libadwaita glassmorphic UI, Tokyo-Night terminal TUI, and Flutter mobile sync.
-- **Searchable Command Reference**: Filterable catalog of voice and keyboard commands across window management, hardware controls, wayland peripherals, and developer tooling.
-- **One-Click Quick Start Guide**: Tabbed installation commands for Arch Linux, Ubuntu/Debian, Fedora, and CLI mode with copy-to-clipboard functionality.
+The site includes a recorded desktop walkthrough, a simulated command playground, a searchable command reference, and installation instructions for the terminal, GTK4, and local web interfaces. The Android section links to the companion APK and pairing guide.
 
-## 🚀 How to Run Locally
+## Preview locally
 
-You can run this website instantly using Python's built-in HTTP server:
+From the website repository, run:
 
 ```bash
-cd /home/natesh/Downloads/BenX_Website
-python3 -m http.server 8080
+npx --yes serve@14 . --listen tcp://127.0.0.1:8080
 ```
 
-Then open `http://localhost:8080` in your web browser.
+Open http://127.0.0.1:8080. The site uses CDN-hosted Tailwind, Lucide, and fonts. The walkthrough video is served from `assets/`. Use a server with HTTP range support for chapter seeking. For a quick preview of the page and its text, `python3 -m http.server 8080 --bind 127.0.0.1` also works.
 
-Or simply open `index.html` directly in your favorite browser:
-```bash
-xdg-open index.html
-```
+## Update the documentation
 
-## 📁 Directory Structure
-```
-BenX_Website/
-├── index.html        # Main responsive showcase landing page
-├── css/
-│   └── style.css     # Tokyo-Night and Libadwaita dark glassmorphic styling
-├── js/
-│   └── app.js        # Waveform visualizer, simulator, search filter, tab engine
-├── assets/           # Project imagery, robot mascot, and banners
-└── README.md
-```
+- `index.html` contains the walkthrough, feature descriptions, and installation steps.
+- `js/app.js` contains the simulated command examples and page interactions.
+- `css/style.css` contains custom styles.
 
-## 🌐 Deployment
-This website is 100% static and client-side ready. It can be deployed immediately to:
-- **GitHub Pages** (Settings -> Pages -> Deploy from branch)
-- **Vercel** (`vercel --prod`)
-- **Netlify** (Drag-and-drop the directory)
-- **Cloudflare Pages**
+Check command names and installation steps against the [assistant README](https://github.com/NateshKannaR/BenX-Assisto_V-2.0/blob/main/README.md). Update the APK link when a new companion build is published.

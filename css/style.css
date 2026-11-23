@@ -263,3 +263,22 @@ input:focus, button:focus-visible {
   border: none;
   box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
 }
+
+section[id] {
+  scroll-margin-top: 5rem;
+}
+
+:focus-visible {
+  outline: 2px solid #6ee7b7;
+  outline-offset: 3px;
+}
+
+.command-card[hidden] {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+}

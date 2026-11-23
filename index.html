@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BenX — The Deterministic AI Desktop Runtime for Linux</title>
-  <meta name="description" content="BenX V-2.0 is an enterprise-grade AI runtime built for Arch Linux and Hyprland (Wayland). Sub-100ms compositor automation, kernel hardware control, and gated security.">
+  <title>BenX — Desktop assistant for Hyprland</title>
+  <meta name="description" content="Install BenX on Arch Linux, save and restore Hyprland workspaces, and pair the Android companion.">
   
   <link rel="icon" type="image/jpeg" href="assets/benx.jpg">
 
@@ -59,31 +59,31 @@
       </a>
 
       <!-- Desktop Links -->
-      <nav class="hidden md:flex items-center gap-7 text-xs font-medium text-zinc-400">
+      <nav aria-label="Main navigation" class="hidden lg:flex items-center gap-7 text-xs font-medium text-zinc-400">
         <a href="#demo" class="hover:text-white transition-colors flex items-center gap-1">
           <i data-lucide="play-circle" class="w-3.5 h-3.5 text-zinc-300"></i>
-          <span>Live Demo</span>
+          <span>Walkthrough</span>
         </a>
         <a href="#architecture" class="hover:text-white transition-colors">Architecture</a>
-        <a href="#capabilities" class="hover:text-white transition-colors">Bento Matrix</a>
+        <a href="#capabilities" class="hover:text-white transition-colors">Features</a>
         <a href="#inspector" class="hover:text-white transition-colors flex items-center gap-1.5">
           <span>Inspector</span>
           <span class="text-[10px] font-mono px-1.5 py-0.2 rounded bg-white/[0.08] text-zinc-300">⌘K</span>
         </a>
-        <a href="#benchmarks" class="hover:text-white transition-colors">Benchmarks</a>
+        <a href="#android" class="hover:text-white transition-colors">Android</a>
         <a href="#quickstart" class="hover:text-white transition-colors">Install</a>
       </nav>
 
       <!-- Right CTAs -->
       <div class="flex items-center gap-3">
-        <a href="https://github.com/NateshKannaR/BenX-Assisto_V-2.0" target="_blank" rel="noopener noreferrer" 
+        <a href="https://github.com/NateshKannaR/BenX-Assisto_V-2.0" target="_blank" rel="noopener noreferrer" aria-label="BenX on GitHub"
            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-mono text-zinc-300 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] hover:border-white/20 transition-all">
           <i data-lucide="github" class="w-3.5 h-3.5"></i>
-          <span>GitHub</span>
+          <span class="hidden sm:inline">GitHub</span>
         </a>
         <a href="#quickstart" 
            class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium text-black bg-white hover:bg-zinc-200 transition-all">
-          <span>Get Started</span>
+          <span>Install</span>
         </a>
       </div>
     </header>
@@ -95,22 +95,16 @@
   <section class="relative pt-36 pb-20 md:pt-44 md:pb-24 overflow-hidden">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
       
-      <!-- Precision Pill -->
-      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.03] border border-white/[0.08] text-xs font-mono text-zinc-400">
-        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-        <span>Deterministic Linux AI Runtime</span>
-        <span class="text-zinc-600">/</span>
-        <span class="text-zinc-300">Arch Linux & Hyprland</span>
-      </div>
+      <p class="font-mono text-sm text-emerald-300">BenX V-2.0 · Arch Linux + Hyprland</p>
 
       <!-- Main Heading -->
       <h1 class="text-4xl sm:text-6xl lg:text-7xl font-semibold tracking-tight text-white max-w-4xl mx-auto leading-[1.1]">
-        The Sovereign AI Assistant for Linux Desktops.
+        Your Hyprland workspace, ready to restore.
       </h1>
 
       <!-- Subtitle -->
       <p class="text-base sm:text-lg text-zinc-400 max-w-2xl mx-auto leading-relaxed font-normal">
-        BenX V-2.0 integrates high-throughput Groq LPU inference directly into Hyprland’s socket2 IPC layer. Control window layouts, manage hardware scaling governors, and inspect runtime telemetry with deterministic sub-100ms execution.
+        BenX is a Linux desktop assistant for managing windows, workspaces, and laptop controls. Save and restore your layout from the terminal, GTK4, or the local web UI.
       </p>
 
       <!-- Action Buttons -->
@@ -118,11 +112,11 @@
         <a href="#demo" 
            class="px-5 py-2.5 rounded-xl text-xs font-semibold text-black bg-white hover:bg-zinc-200 transition-all shadow-[0_0_24px_rgba(255,255,255,0.2)] flex items-center gap-2">
           <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
-          <span>Watch 2-Min Live Walkthrough</span>
+          <span>Watch the two-minute walkthrough</span>
         </a>
         <a href="#quickstart" 
            class="px-5 py-2.5 rounded-xl text-xs font-mono text-zinc-300 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] hover:border-white/20 transition-all">
-          Install BenX Runtime
+          Install BenX
         </a>
       </div>
 
@@ -138,7 +132,7 @@
       <!-- Video Frame Header -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-white/[0.08]">
         <div>
-          <span class="badge-pill mb-2">Live Session Recording</span>
+
           <h2 class="text-xl sm:text-2xl font-semibold text-white tracking-tight flex items-center gap-2">
             <span>BenX Desktop Session Demo</span>
             <span class="text-xs font-mono px-2 py-0.5 rounded-full bg-white/[0.06] text-zinc-400">02:00</span>
@@ -154,6 +148,8 @@
           <button class="chapter-btn" data-time="105">1:45 Safety Gate</button>
         </div>
       </div>
+
+      <p id="videoStatus" class="text-sm text-zinc-400" role="status" hidden></p>
 
       <!-- Video Player Theater Window -->
       <div class="video-theater-wrapper group">
@@ -187,11 +183,11 @@
           </video>
 
           <!-- Play Button Glass Overlay -->
-          <div id="videoOverlay" class="video-overlay-play">
-            <div class="play-circle-btn">
+          <button type="button" id="videoOverlay" class="video-overlay-play" aria-label="Play walkthrough">
+            <span class="play-circle-btn">
               <i data-lucide="play" class="w-8 h-8 fill-current ml-1"></i>
-            </div>
-          </div>
+            </span>
+          </button>
 
         </div>
 
@@ -199,7 +195,7 @@
         <div class="px-4 py-3 bg-zinc-950/95 border-t border-white/[0.06] space-y-2">
           
           <!-- Scrubber Timeline -->
-          <input id="videoScrubber" type="range" min="0" max="100" value="0" step="0.1" class="video-scrubber">
+          <input id="videoScrubber" type="range" aria-label="Walkthrough position" min="0" max="100" value="0" step="0.1" class="video-scrubber">
 
           <div class="flex items-center justify-between text-xs font-mono text-zinc-400">
             <div class="flex items-center gap-3">
@@ -230,47 +226,6 @@
 
       </div>
 
-      <!-- Key Takeaways Grid Below Video -->
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 font-mono text-xs">
-        <div class="p-3.5 rounded-xl bg-white/[0.02] border border-white/[0.06] space-y-1">
-          <span class="text-zinc-500 block text-[10px] uppercase">Compositor Execution</span>
-          <strong class="text-zinc-200">Native Wayland IPC</strong>
-          <p class="text-[11px] font-sans text-zinc-400">Zero screen flicker, direct socket2 window dispatch.</p>
-        </div>
-
-        <div class="p-3.5 rounded-xl bg-white/[0.02] border border-white/[0.06] space-y-1">
-          <span class="text-zinc-500 block text-[10px] uppercase">Inference Speed</span>
-          <strong class="text-zinc-200">68ms TTFT on Groq</strong>
-          <p class="text-[11px] font-sans text-zinc-400">High-throughput LPU intelligence responding instantly.</p>
-        </div>
-
-        <div class="p-3.5 rounded-xl bg-white/[0.02] border border-white/[0.06] space-y-1">
-          <span class="text-zinc-500 block text-[10px] uppercase">Acoustic Feedback</span>
-          <strong class="text-zinc-200">Cairo 60Hz Waveform</strong>
-          <p class="text-[11px] font-sans text-zinc-400">Tactile visual audio spectrum responding to speech.</p>
-        </div>
-
-        <div class="p-3.5 rounded-xl bg-white/[0.02] border border-white/[0.06] space-y-1">
-          <span class="text-zinc-500 block text-[10px] uppercase">Safety Guarantee</span>
-          <strong class="text-zinc-200">Gated Destruction</strong>
-          <p class="text-[11px] font-sans text-zinc-400">Strict confirmation prompt before root or kill actions.</p>
-        </div>
-      </div>
-
-      <!-- Studio Spectrum Analyzer Linked to Audio -->
-      <div class="bento-card p-4 space-y-2">
-        <div class="flex items-center justify-between text-[11px] font-mono text-zinc-400">
-          <span class="flex items-center gap-2">
-            <i data-lucide="audio-lines" class="w-3.5 h-3.5 text-zinc-300"></i>
-            <span>Real-time Studio Spectrum Analyzer</span>
-          </span>
-          <span id="spectrumBadge" class="text-[10px] font-mono px-2 py-0.5 rounded-full border border-white/10 text-zinc-400 bg-white/[0.02]">
-            LISTENING
-          </span>
-        </div>
-        <canvas id="audioSpectrumCanvas"></canvas>
-      </div>
-
     </div>
   </section>
 
@@ -282,12 +237,12 @@
       
       <!-- Section Header -->
       <div class="max-w-2xl mx-auto text-center space-y-3 mb-16">
-        <span class="badge-pill">Technical Specification</span>
+
         <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight text-white">
-          Deterministic 4-Stage Runtime Pipeline
+          How BenX handles a command
         </h2>
         <p class="text-sm text-zinc-400">
-          How voice, keyboard, and mobile commands translate into synchronous Wayland IPC dispatches.
+          Follow a desktop command from input to interpretation, confirmation, and execution.
         </p>
       </div>
 
@@ -297,20 +252,16 @@
         <!-- Left: Stage Nav -->
         <div id="archNav" class="lg:col-span-5 flex flex-col gap-2">
           <button data-arch-step="1" class="px-4 py-3 rounded-xl text-left border border-white/20 bg-white/[0.07] text-white font-mono text-xs font-semibold transition-all">
-            <span class="text-zinc-500 text-[10px] block uppercase">Stage 01</span>
-            <span>1. Surface Ingestion Layer</span>
+            <span>Desktop interfaces</span>
           </button>
           <button data-arch-step="2" class="px-4 py-3 rounded-xl text-left border border-white/[0.06] bg-transparent text-zinc-400 hover:text-white font-mono text-xs transition-all">
-            <span class="text-zinc-500 text-[10px] block uppercase">Stage 02</span>
-            <span>2. Groq LPUs & Multi-Model Kernel</span>
+            <span>Command interpretation</span>
           </button>
           <button data-arch-step="3" class="px-4 py-3 rounded-xl text-left border border-white/[0.06] bg-transparent text-zinc-400 hover:text-white font-mono text-xs transition-all">
-            <span class="text-zinc-500 text-[10px] block uppercase">Stage 03</span>
-            <span>3. CONFIRM_ACTIONS Security Barrier</span>
+            <span>Action confirmation</span>
           </button>
           <button data-arch-step="4" class="px-4 py-3 rounded-xl text-left border border-white/[0.06] bg-transparent text-zinc-400 hover:text-white font-mono text-xs transition-all">
-            <span class="text-zinc-500 text-[10px] block uppercase">Stage 04</span>
-            <span>4. Hyprland & Linux Sysfs Dispatch</span>
+            <span>Desktop execution</span>
           </button>
         </div>
 
@@ -319,15 +270,15 @@
           <div class="space-y-2">
             <span class="text-[10px] font-mono text-zinc-500 uppercase tracking-wider block">Execution Specification</span>
             <h3 id="archTitle" class="text-xl sm:text-2xl font-semibold text-white">
-              1. Surface Ingestion Layer
+              Desktop interfaces
             </h3>
             <p id="archSubtitle" class="text-xs font-mono text-zinc-400">
-              Non-blocking Wayland hooks, voice detection, and terminal interfaces
+              TUI, CLI, GTK4, and loopback web UI
             </p>
           </div>
 
           <p id="archBody" class="text-sm text-zinc-300 leading-relaxed font-normal">
-            BenX exposes three concurrent entry vectors: a native GTK4/Libadwaita client with floating HUD overlay, a lightweight Tokyo-Night terminal TUI (<45MB RAM footprint), and an on-device WakeWordEngine with continuous background listening. Commands are received as structured events without UI thread stalls.
+            The setup script opens the terminal UI. Use the GTK4 window, plain text prompt, or local browser when those interfaces fit your workflow.
           </p>
 
           <!-- Dynamic Specs Grid -->
@@ -348,12 +299,12 @@
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <div class="max-w-2xl mx-auto text-center space-y-3 mb-16">
-        <span class="badge-pill">Bento Grid Matrix</span>
+
         <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight text-white">
-          Engineered for System Autonomy
+          What BenX can do
         </h2>
         <p class="text-sm text-zinc-400">
-          Built without bloated abstractions. Direct C / Python / Wayland system calls.
+          Desktop actions depend on your Hyprland session and installed utilities.
         </p>
       </div>
 
@@ -396,15 +347,15 @@
               <span class="flex items-center gap-2"><i data-lucide="shield" class="w-4 h-4 text-amber-400"></i> Safety Gate</span>
               <span class="text-amber-400 text-[10px]">GATED</span>
             </div>
-            <h3 class="text-xl font-semibold text-white">CONFIRM_ACTIONS Barrier</h3>
+            <h3 class="text-xl font-semibold text-white">Action confirmation</h3>
             <p class="text-sm text-zinc-400 leading-relaxed">
-              Every destructive syscall (<code class="text-zinc-300">reboot</code>, <code class="text-zinc-300">pacman</code>, <code class="text-zinc-300">pkill</code>) is halted for explicit user confirmation.
+              Protected actions such as reboot, package installation, and process termination ask for approval.
             </p>
           </div>
 
           <div class="p-3 rounded-lg bg-black/50 border border-white/[0.06] font-mono text-[11px] text-zinc-400">
             <span class="text-zinc-500 block text-[10px]">PROTECTED CORE:</span>
-            <span>hyprland, systemd, pipewire immune</span>
+            <span>Guards for critical processes and services</span>
           </div>
         </div>
 
@@ -415,9 +366,9 @@
               <span class="flex items-center gap-2"><i data-lucide="cpu" class="w-4 h-4 text-white"></i> Kernel Control</span>
               <span class="text-zinc-500">sysfs</span>
             </div>
-            <h3 class="text-xl font-semibold text-white">Hardware & Battery Governance</h3>
+            <h3 class="text-xl font-semibold text-white">Laptop controls</h3>
             <p class="text-sm text-zinc-400 leading-relaxed">
-              Direct access to scaling governors, Wi-Fi 6 AP scanning via <code class="text-zinc-300">nmcli</code>, and automated power-saver triggers on low battery (&lt;15%).
+              Check the battery, switch power profiles, scan Wi-Fi networks, and inspect Bluetooth devices.
             </p>
           </div>
 
@@ -434,15 +385,15 @@
               <span class="flex items-center gap-2"><i data-lucide="eye" class="w-4 h-4 text-white"></i> Multimodal Vision</span>
               <span class="text-zinc-500">Tesseract</span>
             </div>
-            <h3 class="text-xl font-semibold text-white">Screen Analysis & Privacy</h3>
+            <h3 class="text-xl font-semibold text-white">Screen analysis</h3>
             <p class="text-sm text-zinc-400 leading-relaxed">
-              Instant on-screen text extraction with Tesseract OCR engine, paired with vision-language models for terminal error diagnostics with privacy bounds.
+              Capture a region, extract text with Tesseract, and optionally use a configured vision model for analysis.
             </p>
           </div>
 
           <div class="font-mono text-xs text-zinc-400 space-y-1">
             <div class="flex justify-between"><span>OCR Engine</span><strong class="text-zinc-200">Tesseract Eng</strong></div>
-            <div class="flex justify-between"><span>Recording Shield</span><strong class="text-zinc-200">Exclusion Active</strong></div>
+            <div class="flex justify-between"><span>Region capture</span><strong class="text-zinc-200">Grim + Slurp</strong></div>
           </div>
         </div>
 
@@ -453,15 +404,15 @@
               <span class="flex items-center gap-2"><i data-lucide="terminal" class="w-4 h-4 text-white"></i> Interfaces</span>
               <span class="text-zinc-500">GTK4 / TUI</span>
             </div>
-            <h3 class="text-xl font-semibold text-white">GTK4 Glassmorphism & TUI</h3>
+            <h3 class="text-xl font-semibold text-white">Desktop interfaces</h3>
             <p class="text-sm text-zinc-400 leading-relaxed">
-              Choice between a modern Libadwaita desktop window with a 420x560 pinned floating widget, or a keyboard-driven Tokyo-Night terminal interface.
+              Use the keyboard-driven terminal UI, GTK4 desktop window, plain text prompt, or local browser interface.
             </p>
           </div>
 
           <div class="font-mono text-xs text-zinc-400 space-y-1">
             <div class="flex justify-between"><span>GTK4 Desktop</span><strong class="text-zinc-200">Adw.Preferences</strong></div>
-            <div class="flex justify-between"><span>Tokyo-Night TUI</span><strong class="text-zinc-200">42MB Footprint</strong></div>
+            <div class="flex justify-between"><span>Tokyo-Night TUI</span><strong class="text-zinc-200">Default launcher</strong></div>
           </div>
         </div>
 
@@ -477,12 +428,12 @@
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <div class="max-w-2xl mx-auto text-center space-y-3 mb-12">
-        <span class="badge-pill">Interactive Cockpit</span>
+
         <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight text-white">
-          Command Inspector & IPC Playground
+          Try a command
         </h2>
         <p class="text-sm text-zinc-400">
-          Test real commands or press <kbd class="px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-200 text-xs font-mono">⌘K</kbd> to focus. Switch between formatted execution and raw JSON IPC messages.
+          Preview a simulated result or press <kbd class="px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-200 text-xs font-mono">⌘K</kbd> to focus. The playground runs in this page and shows example responses and parsed commands.
         </p>
       </div>
 
@@ -491,28 +442,28 @@
         
         <!-- Quick Preset Chips -->
         <div class="space-y-2">
-          <span class="text-[11px] font-mono text-zinc-500 block">Preset Operational Calls:</span>
+          <span class="text-[11px] font-mono text-zinc-500 block">Example commands</span>
           <div id="commandPresetChips" class="flex flex-wrap gap-2">
             <button class="command-chip px-3 py-1.5 rounded-lg" data-cmd="switch to workspace 3">
               "switch to workspace 3"
             </button>
-            <button class="command-chip px-3 py-1.5 rounded-lg" data-cmd="tile focused window left">
-              "tile focused window left"
+            <button class="command-chip px-3 py-1.5 rounded-lg" data-cmd="restore my work layout">
+              "restore my work layout"
             </button>
-            <button class="command-chip px-3 py-1.5 rounded-lg" data-cmd="save layout as deep-work">
-              "save layout as deep-work"
+            <button class="command-chip px-3 py-1.5 rounded-lg" data-cmd="save my work layout">
+              "save my work layout"
             </button>
             <button class="command-chip px-3 py-1.5 rounded-lg" data-cmd="set power profile to power-saver">
               "set power profile to power-saver"
             </button>
-            <button class="command-chip px-3 py-1.5 rounded-lg" data-cmd="inspect battery telemetry">
-              "inspect battery telemetry"
+            <button class="command-chip px-3 py-1.5 rounded-lg" data-cmd="battery status">
+              "battery status"
             </button>
-            <button class="command-chip px-3 py-1.5 rounded-lg" data-cmd="capture region to clipboard">
-              "capture region to clipboard"
+            <button class="command-chip px-3 py-1.5 rounded-lg" data-cmd="screenshot a region">
+              "screenshot a region"
             </button>
             <button class="command-chip px-3 py-1.5 rounded-lg text-amber-300 border-amber-500/30" data-cmd="kill process chrome">
-              "kill process chrome" (Safety Gated)
+              "kill process chrome"
             </button>
           </div>
         </div>
@@ -521,52 +472,31 @@
         <div class="flex flex-col sm:flex-row gap-3">
           <div class="relative flex-1">
             <i data-lucide="terminal" class="w-4 h-4 text-zinc-400 absolute left-3.5 top-3.5"></i>
-            <input id="inspectorInput" type="text" 
-                   value="switch to workspace 3" 
+            <input id="inspectorInput" type="text" aria-label="Command to preview"
+                   value="save my work layout"
                    placeholder="Type a command (e.g. 'switch to workspace 3', 'battery status')..." 
                    class="w-full pl-10 pr-12 py-2.5 rounded-xl bg-black border border-white/[0.08] focus:border-white/30 text-xs font-mono text-white placeholder-zinc-500">
             <span class="absolute right-3.5 top-3 text-[10px] font-mono text-zinc-500 border border-white/[0.08] px-1.5 py-0.5 rounded">⌘K</span>
           </div>
           <button id="inspectorRunBtn" class="px-5 py-2.5 rounded-xl text-xs font-mono font-medium text-black bg-white hover:bg-zinc-200 transition-all shrink-0">
-            Execute Call
+            Preview
           </button>
         </div>
 
-        <!-- Telemetry Headers -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono text-xs">
-          <div class="p-3 rounded-lg bg-black/40 border border-white/[0.04]">
-            <span class="text-[10px] text-zinc-500 uppercase block">Model Core</span>
-            <span id="metaModel" class="text-zinc-200 font-medium">Groq Llama 3.3 70B</span>
-          </div>
-          <div class="p-3 rounded-lg bg-black/40 border border-white/[0.04]">
-            <span class="text-[10px] text-zinc-500 uppercase block">Latency</span>
-            <span id="metaLatency" class="text-zinc-200 font-medium">94ms</span>
-          </div>
-          <div class="p-3 rounded-lg bg-black/40 border border-white/[0.04]">
-            <span class="text-[10px] text-zinc-500 uppercase block">Kernel Layer</span>
-            <span id="metaCategory" class="text-zinc-200 font-medium">Compositor IPC</span>
-          </div>
-          <div class="p-3 rounded-lg bg-black/40 border border-white/[0.04]">
-            <span class="text-[10px] text-zinc-500 uppercase block">Safety Gate</span>
-            <span id="metaSecurity" class="text-emerald-400 font-medium">Verified (Passed)</span>
-          </div>
-        </div>
-
         <!-- Output Screen & Tabs -->
-        <div class="code-surface p-4 space-y-3">
+        <div class="code-surface p-4 space-y-3 text-sm text-zinc-200">
           <div class="flex items-center justify-between pb-3 border-b border-white/[0.06]">
             <div class="flex items-center gap-2">
               <button id="tabFormattedBtn" class="px-3 py-1 text-xs font-mono rounded bg-white/10 text-white font-medium transition-all">
-                Formatted Response
+                Example result
               </button>
               <button id="tabJsonBtn" class="px-3 py-1 text-xs font-mono rounded text-zinc-400 hover:text-white transition-all">
-                Raw JSON IPC Payload
+                Parsed command
               </button>
             </div>
-            <span class="text-[10px] font-mono text-zinc-500">socket2.sock</span>
           </div>
 
-          <div id="inspectorOutput">
+          <div id="inspectorOutput" aria-live="polite">
             <!-- Dynamically rendered by JS -->
           </div>
         </div>
@@ -577,64 +507,30 @@
   </section>
 
   <!-- ==========================================================================
-       SECTION 5: BENCHMARKS & COMPARISON
+       SECTION 5: WORKSPACE DEMO & ANDROID
        ========================================================================== -->
-  <section id="benchmarks" class="py-24 relative">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-      
-      <div class="max-w-2xl mx-auto text-center space-y-3 mb-16">
-        <span class="badge-pill">Performance Metrics</span>
-        <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight text-white">
-          Engineered for Latency-Critical Linux Environments
-        </h2>
-        <p class="text-sm text-zinc-400">
-          Desktop AI is unusable with 1-2 second delays. BenX leverages Groq LPUs for instantaneous dispatch.
-        </p>
-      </div>
-
-      <!-- Comparison Table -->
-      <div class="bento-card overflow-hidden border border-white/[0.08]">
-        <div class="overflow-x-auto">
-          <table class="w-full text-left font-mono text-xs">
-            <thead>
-              <tr class="border-b border-white/[0.08] bg-white/[0.02] text-zinc-400">
-                <th class="p-4 font-medium">Execution Engine</th>
-                <th class="p-4 font-medium">Time to First Token (TTFT)</th>
-                <th class="p-4 font-medium">Total Execution Latency</th>
-                <th class="p-4 font-medium">RAM Footprint</th>
-                <th class="p-4 font-medium">Suitability</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-white/[0.04] text-zinc-300">
-              <tr class="bg-white/[0.03]">
-                <td class="p-4 font-semibold text-white flex items-center gap-2">
-                  <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-                  BenX V-2.0 (Groq LPU)
-                </td>
-                <td class="p-4 text-emerald-400 font-bold">68 - 80ms</td>
-                <td class="p-4 text-emerald-400 font-bold">95 - 120ms</td>
-                <td class="p-4">42MB (TUI) / 105MB (GTK4)</td>
-                <td class="p-4 text-zinc-200">Ideal for real-time window management</td>
-              </tr>
-              <tr>
-                <td class="p-4 text-zinc-400">Traditional Cloud APIs (OpenAI/Anthropic)</td>
-                <td class="p-4 text-zinc-400">550 - 900ms</td>
-                <td class="p-4 text-zinc-400">1,200 - 1,800ms</td>
-                <td class="p-4 text-zinc-400">~60MB</td>
-                <td class="p-4 text-zinc-500">Noticeable delay for rapid window shifting</td>
-              </tr>
-              <tr>
-                <td class="p-4 text-zinc-400">Local CPU Ollama (8B Model on Laptop)</td>
-                <td class="p-4 text-zinc-400">1,100 - 1,800ms</td>
-                <td class="p-4 text-zinc-400">2,500 - 4,000ms</td>
-                <td class="p-4 text-zinc-400">4.8GB - 6.2GB VRAM/RAM</td>
-                <td class="p-4 text-zinc-500">High battery drain and CPU thermal throttling</td>
-              </tr>
-            </tbody>
-          </table>
+  <section id="android" class="py-20 border-t border-white/[0.08]">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-6">
+      <article class="bento-card p-6 sm:p-8 space-y-5">
+        <h2 class="text-2xl sm:text-3xl font-semibold text-white">Try a workspace restore</h2>
+        <p class="text-sm text-zinc-300">Open two windows on different workspaces in a running Hyprland session. These commands work without a model API key.</p>
+        <ol class="list-decimal pl-5 space-y-3 text-sm text-zinc-300">
+          <li>In BenX, enter <code class="text-emerald-300">save my work layout</code>.</li>
+          <li>Move one window to another workspace.</li>
+          <li>Enter <code class="text-emerald-300">restore my work layout</code>.</li>
+        </ol>
+        <p class="text-sm text-zinc-400">BenX matches open windows, moves them back, and reports missing windows or failed moves.</p>
+      </article>
+      <article class="bento-card p-6 sm:p-8 space-y-5">
+        <h2 class="text-2xl sm:text-3xl font-semibold text-white">Pair your Android phone</h2>
+        <p class="text-sm text-zinc-300">Check desktop battery status, list saved layouts, or restore one after confirming on your phone.</p>
+        <p class="text-sm text-zinc-400">The companion requires a pairing token and a trusted <code>wss://</code> endpoint. Follow the setup guide to expose the dedicated companion service.</p>
+        <div class="flex flex-wrap gap-3">
+          <a href="https://github.com/NateshKannaR/BenX-Assisto_V-2.0/actions/runs/45251080537/artifacts/14856687164" class="px-4 py-2.5 rounded-lg text-xs font-semibold bg-emerald-300 text-zinc-950 hover:bg-emerald-200">Download APK</a>
+          <a href="https://github.com/NateshKannaR/BenX-Assisto_V-2.0/blob/main/benx_flutter/README.md" class="px-4 py-2.5 rounded-lg text-xs font-semibold border border-white/20 hover:bg-white/10">Pairing guide</a>
         </div>
-      </div>
-
+        <p class="text-xs text-zinc-400">The APK is a debug-signed build for sideloading from GitHub Actions.</p>
+      </article>
     </div>
   </section>
 
@@ -645,9 +541,9 @@
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <div class="max-w-2xl mx-auto text-center space-y-3 mb-12">
-        <span class="badge-pill">Command Reference</span>
+
         <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight text-white">
-          Natural Language Command Catalog
+          Command reference
         </h2>
         <p class="text-sm text-zinc-400">
           Search across compositor, hardware, peripheral, and developer commands.
@@ -658,17 +554,18 @@
       <div class="max-w-2xl mx-auto space-y-4 mb-10">
         <div class="relative">
           <i data-lucide="search" class="w-4 h-4 text-zinc-400 absolute left-4 top-3.5"></i>
-          <input id="commandSearchInput" type="text" placeholder="Search operational commands (e.g. 'workspace', 'wifi', 'battery', 'screenshot')..." 
+          <input id="commandSearchInput" type="search" aria-label="Search the command reference" placeholder="Search operational commands (e.g. 'workspace', 'wifi', 'battery', 'screenshot')..."
                  class="w-full pl-11 pr-4 py-2.5 rounded-xl bg-black border border-white/[0.08] focus:border-white/30 text-xs font-mono text-white placeholder-zinc-500">
         </div>
 
         <div class="flex flex-wrap gap-2 justify-center font-mono text-xs">
-          <button class="cat-filter-btn px-3 py-1 rounded-lg bg-white text-black font-semibold transition-all" data-cat="all">All Commands</button>
-          <button class="cat-filter-btn px-3 py-1 rounded-lg bg-white/[0.04] text-zinc-400 hover:text-white transition-all" data-cat="compositor">Compositor</button>
-          <button class="cat-filter-btn px-3 py-1 rounded-lg bg-white/[0.04] text-zinc-400 hover:text-white transition-all" data-cat="hardware">Hardware</button>
-          <button class="cat-filter-btn px-3 py-1 rounded-lg bg-white/[0.04] text-zinc-400 hover:text-white transition-all" data-cat="peripherals">Peripherals</button>
-          <button class="cat-filter-btn px-3 py-1 rounded-lg bg-white/[0.04] text-zinc-400 hover:text-white transition-all" data-cat="developer">Developer</button>
+          <button class="cat-filter-btn px-3 py-1 rounded-lg bg-white text-black font-semibold transition-all" data-cat="all" aria-pressed="true">All Commands</button>
+          <button class="cat-filter-btn px-3 py-1 rounded-lg bg-white/[0.04] text-zinc-400 hover:text-white transition-all" data-cat="compositor" aria-pressed="false">Compositor</button>
+          <button class="cat-filter-btn px-3 py-1 rounded-lg bg-white/[0.04] text-zinc-400 hover:text-white transition-all" data-cat="hardware" aria-pressed="false">Hardware</button>
+          <button class="cat-filter-btn px-3 py-1 rounded-lg bg-white/[0.04] text-zinc-400 hover:text-white transition-all" data-cat="peripherals" aria-pressed="false">Peripherals</button>
+          <button class="cat-filter-btn px-3 py-1 rounded-lg bg-white/[0.04] text-zinc-400 hover:text-white transition-all" data-cat="developer" aria-pressed="false">Developer</button>
         </div>
+        <p id="commandSearchStatus" class="text-xs text-zinc-400" role="status"></p>
       </div>
 
       <!-- Command Cards Grid -->
@@ -715,7 +612,7 @@
             <span>HARDWARE</span>
             <span>upower DBus</span>
           </div>
-          <div class="text-white font-medium">"inspect battery telemetry"</div>
+          <div class="text-white font-medium">"battery status"</div>
           <p class="text-zinc-400 text-[11px] font-sans">Reports percentage, discharge rate, health ratio, and runtime estimate.</p>
         </div>
 
@@ -733,7 +630,7 @@
             <span>PERIPHERALS</span>
             <span>grim + slurp</span>
           </div>
-          <div class="text-white font-medium">"capture region to clipboard"</div>
+          <div class="text-white font-medium">"screenshot a region"</div>
           <p class="text-zinc-400 text-[11px] font-sans">Interactive bounding box selection copied directly to Wayland clipboard.</p>
         </div>
 
@@ -763,114 +660,81 @@
   <!-- ==========================================================================
        SECTION 7: QUICKSTART & INSTALLATION
        ========================================================================== -->
-  <section id="quickstart" class="py-24 relative">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-      
-      <div class="text-center space-y-3 mb-12">
-        <span class="badge-pill">Distribution Installer</span>
-        <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight text-white">
-          Deployment & Installation
-        </h2>
-        <p class="text-sm text-zinc-400">
-          Native packages and dependencies for Linux environments.
-        </p>
+  <section id="quickstart" class="py-20">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-7">
+      <div class="space-y-3">
+        <h2 class="text-3xl sm:text-4xl font-semibold text-white">Get started with BenX</h2>
+        <p class="text-sm text-zinc-400">The setup script creates a Python environment and starts the terminal UI.</p>
       </div>
-
-      <!-- Tabbed Code Box -->
-      <div class="bento-card overflow-hidden border border-white/[0.08]">
-        
-        <!-- Tab Headers -->
-        <div class="flex border-b border-white/[0.08] bg-black/60 font-mono text-xs overflow-x-auto">
-          <button class="qs-tab px-5 py-3 border-b-2 border-white text-white font-medium transition-all" data-target="tab-arch">
-            Arch Linux / Hyprland
-          </button>
-          <button class="qs-tab px-5 py-3 border-b-2 border-transparent text-zinc-400 hover:text-white transition-all" data-target="tab-ubuntu">
-            Ubuntu / Debian
-          </button>
-          <button class="qs-tab px-5 py-3 border-b-2 border-transparent text-zinc-400 hover:text-white transition-all" data-target="tab-fedora">
-            Fedora
-          </button>
-          <button class="qs-tab px-5 py-3 border-b-2 border-transparent text-zinc-400 hover:text-white transition-all" data-target="tab-cli">
-            Headless CLI
-          </button>
+      <div class="bento-card overflow-hidden">
+        <div class="flex border-b border-white/[0.08] bg-black/60 font-mono text-sm overflow-x-auto">
+          <button type="button" aria-pressed="true" class="qs-tab px-5 py-3 border-b-2 border-white text-white" data-target="tab-install">Install</button>
+          <button type="button" aria-pressed="false" class="qs-tab px-5 py-3 border-b-2 border-transparent text-zinc-400" data-target="tab-launch">Launch modes</button>
+          <button type="button" aria-pressed="false" class="qs-tab px-5 py-3 border-b-2 border-transparent text-zinc-400" data-target="tab-gtk">GTK4</button>
         </div>
-
-        <!-- Arch Linux Pane -->
-        <div id="tab-arch" class="qs-pane p-6 space-y-5">
-          <div class="space-y-1.5">
-            <span class="text-[11px] font-mono text-zinc-500 uppercase">1. Install System Dependencies</span>
-            <div class="code-row p-3 rounded-lg bg-black border border-white/[0.06] flex items-center justify-between font-mono text-xs text-zinc-200">
-              <code>sudo pacman -S gtk4 libadwaita grim slurp cliphist wl-clipboard ydotool networkmanager python</code>
-              <button class="copy-btn p-1.5 rounded hover:bg-white/10 text-zinc-400 hover:text-white"><i data-lucide="copy" class="w-3.5 h-3.5"></i></button>
+        <div id="tab-install" class="qs-pane p-5 sm:p-6 space-y-5">
+          <p class="text-sm text-zinc-400">Use Python 3.10+ and run these commands from a Hyprland session for desktop actions.</p>
+          <div class="space-y-2">
+            <p class="text-sm text-zinc-300">Clone the assistant</p>
+            <div class="code-row flex items-start gap-3 p-3 rounded-lg bg-black border border-white/[0.08]">
+              <pre class="flex-1 min-w-0 overflow-x-auto text-xs leading-relaxed text-zinc-200"><code>git clone https://github.com/NateshKannaR/BenX-Assisto_V-2.0.git
+cd BenX-Assisto_V-2.0</code></pre>
+              <button type="button" class="copy-btn shrink-0 px-2 py-1 rounded text-xs text-zinc-300 hover:bg-white/10">Copy</button>
             </div>
           </div>
-
-          <div class="space-y-1.5">
-            <span class="text-[11px] font-mono text-zinc-500 uppercase">2. Clone & Run Setup Script</span>
-            <div class="code-row p-3 rounded-lg bg-black border border-white/[0.06] flex items-center justify-between font-mono text-xs text-zinc-200">
-              <code>git clone https://github.com/NateshKannaR/BenX-Assisto_V-2.0.git && cd BenX-Assisto_V-2.0 && ./setup_and_run.sh</code>
-              <button class="copy-btn p-1.5 rounded hover:bg-white/10 text-zinc-400 hover:text-white"><i data-lucide="copy" class="w-3.5 h-3.5"></i></button>
-            </div>
-          </div>
-
-          <div class="space-y-1.5">
-            <span class="text-[11px] font-mono text-zinc-500 uppercase">3. Set Free Groq API Key</span>
-            <div class="code-row p-3 rounded-lg bg-black border border-white/[0.06] flex items-center justify-between font-mono text-xs text-zinc-200">
-              <code>export GROQ_API_KEY="gsk_your_groq_key_here"</code>
-              <button class="copy-btn p-1.5 rounded hover:bg-white/10 text-zinc-400 hover:text-white"><i data-lucide="copy" class="w-3.5 h-3.5"></i></button>
+          <div class="space-y-2">
+            <p class="text-sm text-zinc-300">Install dependencies and open the terminal UI</p>
+            <div class="code-row flex items-start gap-3 p-3 rounded-lg bg-black border border-white/[0.08]">
+              <pre class="flex-1 min-w-0 overflow-x-auto text-xs leading-relaxed text-zinc-200"><code>./setup_and_run.sh</code></pre>
+              <button type="button" class="copy-btn shrink-0 px-2 py-1 rounded text-xs text-zinc-300 hover:bg-white/10">Copy</button>
             </div>
           </div>
         </div>
-
-        <!-- Ubuntu Pane -->
-        <div id="tab-ubuntu" class="qs-pane hidden p-6 space-y-5">
-          <div class="space-y-1.5">
-            <span class="text-[11px] font-mono text-zinc-500 uppercase">1. Install Dependencies</span>
-            <div class="code-row p-3 rounded-lg bg-black border border-white/[0.06] flex items-center justify-between font-mono text-xs text-zinc-200">
-              <code>sudo apt install -y libgtk-4-1 libadwaita-1-0 python3-pip wl-clipboard</code>
-              <button class="copy-btn p-1.5 rounded hover:bg-white/10 text-zinc-400 hover:text-white"><i data-lucide="copy" class="w-3.5 h-3.5"></i></button>
+        <div id="tab-launch" class="qs-pane hidden p-5 sm:p-6 space-y-5">
+          <p class="text-sm text-zinc-400">You can also activate benx_venv and run python benx.py with the same flags.</p>
+          <div class="space-y-2">
+            <p class="text-sm text-zinc-300">Check tools and optional features</p>
+            <div class="code-row flex items-start gap-3 p-3 rounded-lg bg-black border border-white/[0.08]">
+              <pre class="flex-1 min-w-0 overflow-x-auto text-xs leading-relaxed text-zinc-200"><code>./setup_and_run.sh --doctor</code></pre>
+              <button type="button" class="copy-btn shrink-0 px-2 py-1 rounded text-xs text-zinc-300 hover:bg-white/10">Copy</button>
             </div>
           </div>
-          <div class="space-y-1.5">
-            <span class="text-[11px] font-mono text-zinc-500 uppercase">2. Clone & Run</span>
-            <div class="code-row p-3 rounded-lg bg-black border border-white/[0.06] flex items-center justify-between font-mono text-xs text-zinc-200">
-              <code>git clone https://github.com/NateshKannaR/BenX-Assisto_V-2.0.git && cd BenX-Assisto_V-2.0 && pip install -r requirements.txt</code>
-              <button class="copy-btn p-1.5 rounded hover:bg-white/10 text-zinc-400 hover:text-white"><i data-lucide="copy" class="w-3.5 h-3.5"></i></button>
+          <div class="space-y-2">
+            <p class="text-sm text-zinc-300">Open the plain text prompt</p>
+            <div class="code-row flex items-start gap-3 p-3 rounded-lg bg-black border border-white/[0.08]">
+              <pre class="flex-1 min-w-0 overflow-x-auto text-xs leading-relaxed text-zinc-200"><code>./setup_and_run.sh --cli</code></pre>
+              <button type="button" class="copy-btn shrink-0 px-2 py-1 rounded text-xs text-zinc-300 hover:bg-white/10">Copy</button>
             </div>
           </div>
-        </div>
-
-        <!-- Fedora Pane -->
-        <div id="tab-fedora" class="qs-pane hidden p-6 space-y-5">
-          <div class="space-y-1.5">
-            <span class="text-[11px] font-mono text-zinc-500 uppercase">1. Install via DNF</span>
-            <div class="code-row p-3 rounded-lg bg-black border border-white/[0.06] flex items-center justify-between font-mono text-xs text-zinc-200">
-              <code>sudo dnf install -y gtk4 libadwaita grim slurp wl-clipboard python3-pip</code>
-              <button class="copy-btn p-1.5 rounded hover:bg-white/10 text-zinc-400 hover:text-white"><i data-lucide="copy" class="w-3.5 h-3.5"></i></button>
+          <div class="space-y-2">
+            <p class="text-sm text-zinc-300">Open the local web UI at 127.0.0.1:8000</p>
+            <div class="code-row flex items-start gap-3 p-3 rounded-lg bg-black border border-white/[0.08]">
+              <pre class="flex-1 min-w-0 overflow-x-auto text-xs leading-relaxed text-zinc-200"><code>./setup_and_run.sh --web</code></pre>
+              <button type="button" class="copy-btn shrink-0 px-2 py-1 rounded text-xs text-zinc-300 hover:bg-white/10">Copy</button>
             </div>
           </div>
         </div>
-
-        <!-- CLI Pane -->
-        <div id="tab-cli" class="qs-pane hidden p-6 space-y-5">
-          <div class="space-y-1.5">
-            <span class="text-[11px] font-mono text-zinc-500 uppercase">Launch Terminal TUI Mode</span>
-            <div class="code-row p-3 rounded-lg bg-black border border-white/[0.06] flex items-center justify-between font-mono text-xs text-zinc-200">
-              <code>python3 benx_tui.py</code>
-              <button class="copy-btn p-1.5 rounded hover:bg-white/10 text-zinc-400 hover:text-white"><i data-lucide="copy" class="w-3.5 h-3.5"></i></button>
+        <div id="tab-gtk" class="qs-pane hidden p-5 sm:p-6 space-y-5">
+          <p class="text-sm text-zinc-400">Use the system Python for this environment. If you already created an isolated benx_venv, recreate it with system packages enabled before starting GTK.</p>
+          <div class="space-y-2">
+            <p class="text-sm text-zinc-300">Install GTK4 bindings on Arch</p>
+            <div class="code-row flex items-start gap-3 p-3 rounded-lg bg-black border border-white/[0.08]">
+              <pre class="flex-1 min-w-0 overflow-x-auto text-xs leading-relaxed text-zinc-200"><code>sudo pacman -S gtk4 libadwaita python-gobject python-cairo</code></pre>
+              <button type="button" class="copy-btn shrink-0 px-2 py-1 rounded text-xs text-zinc-300 hover:bg-white/10">Copy</button>
             </div>
           </div>
-          <div class="space-y-1.5">
-            <span class="text-[11px] font-mono text-zinc-500 uppercase">Headless Daemon Mode</span>
-            <div class="code-row p-3 rounded-lg bg-black border border-white/[0.06] flex items-center justify-between font-mono text-xs text-zinc-200">
-              <code>python3 benx.py --no-gui</code>
-              <button class="copy-btn p-1.5 rounded hover:bg-white/10 text-zinc-400 hover:text-white"><i data-lucide="copy" class="w-3.5 h-3.5"></i></button>
+          <div class="space-y-2">
+            <p class="text-sm text-zinc-300">Create the environment with access to the system bindings</p>
+            <div class="code-row flex items-start gap-3 p-3 rounded-lg bg-black border border-white/[0.08]">
+              <pre class="flex-1 min-w-0 overflow-x-auto text-xs leading-relaxed text-zinc-200"><code>python3 -m venv --system-site-packages benx_venv
+./setup_and_run.sh --gtk</code></pre>
+              <button type="button" class="copy-btn shrink-0 px-2 py-1 rounded text-xs text-zinc-300 hover:bg-white/10">Copy</button>
             </div>
           </div>
         </div>
-
+        <p id="copyStatus" class="sr-only" role="status"></p>
       </div>
-
+      <p class="text-sm text-zinc-400">For AI chat, export <code>GROQ_API_KEY</code> or <code>OPENROUTER_API_KEY</code> before launch. MongoDB storage is opt-in via <code>MONGODB_URI</code>. See the <a class="underline text-zinc-200" href="https://github.com/NateshKannaR/BenX-Assisto_V-2.0/blob/main/README.md">project README</a> for optional system tools.</p>
     </div>
   </section>
 
@@ -888,10 +752,10 @@
             <span class="text-[10px] px-1.5 py-0.5 rounded bg-white/[0.06] text-zinc-300">v2.0</span>
           </div>
           <p class="text-zinc-400 text-xs max-w-sm font-sans">
-            Autonomous Linux AI assistant tailored for Arch Linux and Hyprland (Wayland), with hardware governance and Groq intelligence.
+            A desktop assistant for Arch Linux and Hyprland.
           </p>
           <div class="text-[11px] text-zinc-500 pt-1">
-            Built by <a href="https://github.com/NateshKannaR" class="text-zinc-300 hover:underline">NateshKannaR</a>. MIT Licensed.
+            Built by <a href="https://github.com/NateshKannaR" class="text-zinc-300 hover:underline">NateshKannaR</a>.
           </div>
         </div>
 
@@ -906,7 +770,7 @@
           <strong class="text-zinc-200 block text-xs">System Support</strong>
           <div>Arch Linux (Hyprland / Wayland)</div>
           <div>GTK4 & Libadwaita</div>
-          <div>Groq LPU Acceleration</div>
+          <div>Optional provider-backed chat</div>
           <div>Tokyo-Night Terminal TUI</div>
         </div>
 
@@ -914,8 +778,8 @@
 
       <div class="flex flex-col sm:flex-row items-center justify-between pt-8 gap-4 text-[11px] text-zinc-500">
         <div>© 2026 BenX Open Source Project.</div>
-        <div class="flex items-center gap-6">
-          <a href="#demo" class="hover:text-zinc-300">Live Demo</a>
+        <div class="flex flex-wrap justify-center items-center gap-x-5 gap-y-2">
+          <a href="#demo" class="hover:text-zinc-300">Walkthrough</a>
           <a href="#architecture" class="hover:text-zinc-300">Architecture</a>
           <a href="#capabilities" class="hover:text-zinc-300">Capabilities</a>
           <a href="#inspector" class="hover:text-zinc-300">Inspector</a>
@@ -928,7 +792,7 @@
 
   <!-- Lucide Script -->
   <script>
-    lucide.createIcons();
+    window.lucide?.createIcons();
   </script>
 
   <!-- App Script -->
